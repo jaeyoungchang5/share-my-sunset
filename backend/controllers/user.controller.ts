@@ -9,12 +9,11 @@ import { User } from '../models';
 import { Request, Response } from 'express';
 
 /**
- * @function signup
- * @description POST request - signup a new user
- * @param {string} req.body.firstName
- * @param {string} req.body.lastName
- * @param {string} req.body.username
- * @param {string} req.body.password
+ * @description Signup a new user
+ * @param {string} req.body.firstName   User's first name
+ * @param {string} req.body.lastName    User's last name
+ * @param {string} req.body.username    User's username
+ * @param {string} req.body.password    User's password
  */
 export function signup(req: Request, res: Response): void{
     if (!req.body.firstName || !req.body.lastName|| !req.body.username || !req.body.password) {
@@ -42,10 +41,9 @@ export function signup(req: Request, res: Response): void{
 }
 
 /**
- * @function login
- * @description POST request - request login for an existing user
- * @param {string} req.body.username
- * @param {string} req.body.password
+ * @description Request login for an existing user
+ * @param {string} req.body.username User's username
+ * @param {string} req.body.password User's password
  */
 export function login(req: Request, res: Response){
     if (!req.body.username || !req.body.password) {
@@ -85,18 +83,17 @@ export function login(req: Request, res: Response){
 }
 
 /**
- * @function getUserInfo
- * @description GET request - get info for a given username
- * @param {string} req.params.username
+ * @description Get info for a user, given user's username
+ * @param {string} req.body.username User's username
  */
 export function getUserInfo(req: Request, res: Response){
-    if (!req.params.username) {
+    if (!req.body.username) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
     }
 
     const body = {
-        username: req.params.username.toLowerCase()
+        username: req.body.username.toLowerCase()
     }
 
     User.findOne({username: body.username})
@@ -109,7 +106,7 @@ export function getUserInfo(req: Request, res: Response){
                 _id: userData._id
             }
             debuglog('LOG', 'user controller - getUserInfo', 'got user info');
-            res.status(200).json({result: 'success', message: returnData});
+            res.status(200).json({result: 'success', data: returnData});
         } else {
             debuglog('ERROR', 'user controller - getUserInfo', 'username not found');
             res.status(404).json({result: 'error', message: 'Username not found.'});
@@ -122,13 +119,12 @@ export function getUserInfo(req: Request, res: Response){
 }
 
 /**
- * @function putUserInfo
- * @description PUT request - update user info (excluding password)
- * @param {string} req.params.username
- * @param {Object} req.body - will contain any fields that the user wants to update
+ * @description Update user info (excluding password)
+ * @param {string} req.body.username User's username
+ * @param {Object} req.body Any fields that the user wants to update: {"key": "value", "key": "value", etc.}
  */
-export function putUserInfo(req: Request, res: Response){
-    if (!req.params.username) {
+export function updateUserInfo(req: Request, res: Response){
+    if (!req.body.username) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
     }
@@ -148,7 +144,7 @@ export function putUserInfo(req: Request, res: Response){
         return;
     }
 
-    User.updateOne({username: req.params.username}, {$set: body})
+    User.updateOne({username: req.body.username}, {$set: body})
     .then(dbResponse => {
         if (dbResponse.modifiedCount == 1){
             debuglog('LOG', 'user controller - updateUserInfo', 'updated user info');
@@ -167,14 +163,13 @@ export function putUserInfo(req: Request, res: Response){
 }
 
 /**
- * @function putUserInfo
- * @description PUT request - update user password
- * @param {string} req.params.username
- * @param {string} req.body.oldPassword - the user's old password
- * @param {string} req.body.newPassword - the user's new password
+ * @description Update user password
+ * @param {string} req.body.username User's username
+ * @param {string} req.body.oldPassword User's old password
+ * @param {string} req.body.newPassword User's new password
  */
-export function putUserPassword(req: Request, res: Response) {
-    if (!req.params.username || !req.body.oldPassword || !req.body.newPassword) {
+export function updateUserPassword(req: Request, res: Response) {
+    if (!req.body.username || !req.body.oldPassword || !req.body.newPassword) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
     }
@@ -184,7 +179,7 @@ export function putUserPassword(req: Request, res: Response) {
         newPassword: req.body.newPassword
     };
 
-    User.findOne({username: req.params.username})
+    User.findOne({username: req.body.username})
     .then(foundUser => {
         if (!foundUser){
             debuglog('ERROR', 'user controller - put user password', 'user username not found');

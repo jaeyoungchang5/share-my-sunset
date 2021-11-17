@@ -9,8 +9,8 @@ const router: Router = express.Router(); // activate router
 import { debuglog } from '../helpers';
 
 /* link controllers */
-//import * as usersCtrl from '../controllers/user.controller';
 import * as usersCtrl from '../controllers/user.controller';
+import * as sunsetsCtrl from '../controllers/sunset.controller';
 
 /* ROUTE ENDPOINTS */
 
@@ -23,9 +23,13 @@ router.get('/test', (req: Request, res: Response): void => {
 // users
 router.post('/signup', usersCtrl.signup);
 router.post('/login', usersCtrl.login);
-router.get('/user/info/:username', usersCtrl.getUserInfo);
-router.put('/user/info/:username', usersCtrl.putUserInfo);
-router.put('/user/password/:username', usersCtrl.putUserPassword);
+router.post('/user/getInfo', usersCtrl.getUserInfo);
+router.post('/user/updateInfo', usersCtrl.updateUserInfo);
+router.post('/user/updatePassword', usersCtrl.updateUserPassword);
+
+// posts
+router.post('/sunset', sunsetsCtrl.shareSunset);
+router.post('/sunset/getSunsetById', sunsetsCtrl.getSunsetById);
 
 export {
     router
