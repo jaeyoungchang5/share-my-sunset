@@ -60,7 +60,6 @@ export function sendFriendRequest(req: Request, res: Response): void {
             { recipient: body.requester, requester: body.recipient }
         ]})
         .then(existingRequests => {
-            console.log(existingRequests);
             if (existingRequests.length > 0) {
                 debuglog('ERROR', 'friend controller - sendFriendRequest', 'friend request already sent');
                 res.status(400).json({result: 'error', message: 'Friend request already sent.'});
@@ -86,33 +85,56 @@ export function sendFriendRequest(req: Request, res: Response): void {
  * @param {ObjectId} req.body.recipient Recipient
  */
 export function acceptFriendRequest(req: Request, res: Response): void {
-//     if (!req.body.requester || !req.body.recipient) {
-//         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
-//         return;
-//     }
+    if (!req.body.requester || !req.body.recipient) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
 
-//     const body = {
-//         requester: new mongoose.Types.ObjectId(req.body.requester),
-//         recipient: new mongoose.Types.ObjectId(req.body.recipient)
-//     };
+    const body = {
+        requester: new mongoose.Types.ObjectId(req.body.requester),
+        recipient: new mongoose.Types.ObjectId(req.body.recipient)
+    };
 
-//     Friend.findOneAndUpdate(
-//         { requester: body.requester, recipient: body.recipient, status: 1 },
-//         { $set: { status: 2 }}
-//     ).then(friendObject => {
-//         if (!friendObject) {
-//             debuglog('ERROR', 'friend controller - acceptFriendRequest', 'Request could not be processed');
-//             res.status(400).json({result: 'error', message: 'Request could not be processed.'});
-//             return;
-//         }
+    FriendRequest.findOneAndRemove({ requester: body.requester, recipient: body.recipient, status: 1 })
+    .then(friendObject => {
+        if (!friendObject) {
+            debuglog('ERROR', 'friend controller - acceptFriendRequest', 'Friend request no longer exists');
+            res.status(400).json({result: 'error', message: 'Friend request no longer exists.'});
+            return;
+        }
 
-//         debuglog('LOG', 'friend controller - sendFriendRequest', 'friend request successfully accepted');
-//         res.status(200).json({result: 'success', message: 'Friend request successfully accepted.'});
-//     }).catch(err => { // catch errors
-//         debuglog('ERROR', 'friend controller - acceptFriendRequest', err);
-//         res.status(400).json(err);
-//         return;
-//     });
+        User.find({'_id': { $in: [body.requester, body.recipient]}})
+        .then(doc => {
+            if (doc.length != 2) {
+                debuglog('ERROR', 'friend controller - sendFriendRequest', 'user(s) do not exist');
+                res.status(404).json({result: 'error', message: 'User(s) do not exist.'});
+                return;
+            }
+
+            doc[0].friends.push(doc[1]._id);
+            doc[1].friends.push(doc[0]._id);
+
+            let index: number;
+            index = doc[0].friendRequests.indexOf(friendObject._id, 0);
+            if (index > -1) {
+                doc[0].friendRequests.splice(index, 1);
+            }
+            index = doc[1].friendRequests.indexOf(friendObject._id, 0);
+            if (index > -1) {
+                doc[1].friendRequests.splice(index, 1);
+            }
+
+            doc[0].save();
+            doc[1].save();
+
+            debuglog('LOG', 'friend controller - sendFriendRequest', 'friend request successfully accepted');
+            res.status(200).json({result: 'success', message: 'Friend request successfully accepted.'});
+        })
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'friend controller - acceptFriendRequest', err);
+        res.status(400).json(err);
+        return;
+    });
 }
 
 /**
