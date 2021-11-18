@@ -1,20 +1,20 @@
 /**
- * @fileoverview friend.model.ts
- * This file is the model (schema) file for the friend collection.
+ * @fileoverview FriendRequest.model.ts
+ * This file is the model (schema) file for the FriendRequest collection.
  */
 
 /* import dependencies */
 import mongoose, { Document, Schema, Model, model, ObjectId } from 'mongoose';
 
-interface IFriend {
+interface IFriendRequest {
     requester: mongoose.Types.ObjectId,
     recipient: mongoose.Types.ObjectId,
     status: Number
 }
 
-interface IFriendModel extends IFriend, Document { }
+interface IFriendRequestModel extends IFriendRequest, Document { }
 
-const FriendSchema: Schema = new Schema({
+const FriendRequestSchema: Schema = new Schema({
     requester: {
         type: mongoose.Types.ObjectId,
         ref: 'User'
@@ -32,4 +32,4 @@ const FriendSchema: Schema = new Schema({
     }
 }, {timestamps: true});
 
-export const Friend: Model<IFriendModel> = model<IFriendModel>("Friend", FriendSchema);
+export const FriendRequest: Model<IFriendRequestModel> = model<IFriendRequestModel>("FriendRequest", FriendRequestSchema);

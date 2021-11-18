@@ -4,7 +4,7 @@
  */
 
 /* import dependencies */
-import { Document, Schema, Model, model, ObjectId } from 'mongoose';
+import mongoose, { Document, Schema, Model, model, ObjectId, Mongoose } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 interface IUser {
@@ -12,10 +12,11 @@ interface IUser {
     lastName: string,
     username: string,
     password: string,
-    friends: ObjectId[]
+    friends: mongoose.Types.ObjectId[],
+    friendRequests: mongoose.Types.ObjectId[]
 }
 
-interface IUserModel extends IUser, Document {
+export interface IUserModel extends IUser, Document {
     checkPassword(password: string): boolean;
 }
 
@@ -39,7 +40,11 @@ const UserSchema: Schema = new Schema({
         required: true
     },
     friends: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
+    }],
+    friendRequests: [{
+        type: mongoose.Types.ObjectId,
         ref: 'Friend'
     }]
 });
