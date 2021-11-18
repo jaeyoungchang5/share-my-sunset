@@ -144,7 +144,7 @@ export function updateUserInfo(req: Request, res: Response){
         return;
     }
 
-    User.updateOne({username: req.body.username}, {$set: body})
+    User.updateOne({username: req.body.username.toLowerCase()}, {$set: body})
     .then(dbResponse => {
         if (dbResponse.modifiedCount == 1){
             debuglog('LOG', 'user controller - updateUserInfo', 'updated user info');
@@ -175,11 +175,12 @@ export function updateUserPassword(req: Request, res: Response) {
     }
 
     const body = {
+        username: req.body.username.toLowerCase(),
         oldPassword: req.body.oldPassword,
         newPassword: req.body.newPassword
     };
 
-    User.findOne({username: req.body.username})
+    User.findOne({username: body.username})
     .then(foundUser => {
         if (!foundUser){
             debuglog('ERROR', 'user controller - put user password', 'user username not found');
