@@ -1,3 +1,9 @@
+/**
+ * @fileoverview images.ts
+ * This is the configuration file for image storage in MongoDB
+ */
+
+/* import dependencies */
 import multer from 'multer';
 import { GridFsStorage } from 'multer-gridfs-storage';
 
@@ -16,14 +22,6 @@ const storage = new GridFsStorage({
         }
     }
 });
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, './uploads');
-//     },
-//     filename: function(req, file, cb) {
-//         cb(null, new Date().toISOString() + file.originalname);
-//     }
-// });
 
 export const upload = multer({
     storage: storage

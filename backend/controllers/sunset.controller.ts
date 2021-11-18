@@ -1,6 +1,7 @@
 /**
  * @fileoverview sunset.controller.ts
  * This file contains all the controller functions for the sunset collection.
+ * @todo Get sunsets by username
  */
 
 /* import dependencies */
