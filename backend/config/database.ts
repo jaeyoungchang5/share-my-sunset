@@ -12,14 +12,17 @@ import { debuglog } from '../helpers/debuglog';
 const username: string = process.env.MONGOATLAS_USERNAME;
 const password: string = process.env.MONGOATLAS_PASSWORD;
 const cluster: string = process.env.MONGOATLAS_CLUSTER;
+const options: string = '?retryWrites=true&w=majority';
 
 // set up full databaseUrl path
-const databaseUrl: string = `mongodb+srv://${username}:${password}@${cluster}`;
+const databaseUrl: string = `mongodb+srv://${username}:${password}@${cluster}${options}`;
+
+let db: Connection;
 
 /* connect to mongodb */
 function connectDB(): void {
     connect(databaseUrl);
-    const db: Connection = connection;
+    db = connection;
 
     db.once('open', async () => {
         debuglog('LOG', 'database config', `Connected to MongoDB '${db.name}' at '${db.host}' at port ${db.port}`);
@@ -30,5 +33,6 @@ function connectDB(): void {
 }
 
 export {
-    connectDB
+    connectDB,
+    db
 };

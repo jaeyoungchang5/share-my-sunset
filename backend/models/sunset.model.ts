@@ -7,12 +7,9 @@
 import { Document, Schema, Model, model } from 'mongoose';
 
 interface ISunset {
-    createdAt: Date,
     username: string,
-    type: string,
-    content: {
-        data: Buffer
-    },
+    sunsetImage: string,
+    description: string
 }
 
 interface ISunsetModel extends ISunset, Document { }
@@ -22,12 +19,13 @@ const SunsetSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    type: {
+    sunsetImage: {
         type: String,
         required: true
     },
-    content: {
-        description: String
+    description: {
+        type: String,
+        required: true
     }
 }, {timestamps: true});
 

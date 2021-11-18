@@ -7,6 +7,7 @@
 import express, { Response, Request, Router } from 'express';
 const router: Router = express.Router(); // activate router
 import { debuglog } from '../helpers';
+import { upload } from '../config';
 
 /* link controllers */
 import * as usersCtrl from '../controllers/user.controller';
@@ -28,7 +29,7 @@ router.post('/user/updateInfo', usersCtrl.updateUserInfo);
 router.post('/user/updatePassword', usersCtrl.updateUserPassword);
 
 // posts
-router.post('/sunset', sunsetsCtrl.shareSunset);
+router.post('/sunset', upload.single('sunsetImage'), sunsetsCtrl.shareSunset);
 router.post('/sunset/getSunsetById', sunsetsCtrl.getSunsetById);
 
 export {

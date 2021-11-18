@@ -25,6 +25,7 @@ connectDB(); // connect to the database
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({extended: true}));
 app.use('/api', router); // all api routes will follow 'https://localhost:PORT/api/ENDPOINTS' format
+app.use(express.static('uploads'));
 
 app.listen(backend_port, (): void => {
     debuglog('LOG', 'server', `Server is listening on port ${backend_port}`);

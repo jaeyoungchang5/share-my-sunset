@@ -5,9 +5,10 @@
 
 /* import dependencies */
 import { debuglog } from '../helpers';
+import { db } from '../config';
 import { Sunset } from '../models';
 import { Request, Response } from 'express';
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 
 /**
  * @description Post a new sunset
@@ -16,31 +17,28 @@ import mongoose, { ObjectId } from 'mongoose';
  * @param {Object} req.body.content Content of post
  */
 export function shareSunset(req: Request, res: Response): void {
-    if (!req.body.username || !req.body.type|| !req.body.content) {
+    if (!req.body.username || !req.body.description || !req.file) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
     }
+    console.log(req.file);
 
-    if (req.body.type == 'text') {
-        const body = {
-            createdAt: new Date(),
-            username: req.body.username.toLowerCase(),
-            type: req.body.type,
-            content: {
-                description: req.body.content.description
-            }
-        };
+    const body = {
+        username: req.body.username.toLowerCase(),
+        description: req.body.description,
+        sunsetImage: req.file.filename
+    };
 
-        const sunset = new Sunset(body);
-        sunset.save()
-        .then(newSunset => {
-            debuglog('LOG', 'sunset controller - share', 'posted new sunset');
-            res.status(201).json({result: 'success', message: 'New sunset shared successfully.'});
-        }).catch(err => { // catch errors
-            debuglog('ERROR', 'sunset controller - share', err);
-            res.status(400).json(err);
-        });
-    }
+    const sunset = new Sunset(body);
+    sunset.save()
+    .then(newSunset => {
+        debuglog('LOG', 'sunset controller - share', 'posted new sunset');
+        res.status(201).json({result: 'success', message: 'New sunset shared successfully.'});
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'sunset controller - share', err);
+        res.status(400).json(err);
+    });
+    
 }
 
 /**
@@ -63,8 +61,46 @@ export function getSunsetById(req: Request, res: Response) {
             res.status(404).json({result: 'error', message: 'Could not find sunset post.'});
             return;
         }
-        debuglog('LOG', 'sunset controller - get sunset', 'found sunset post');
-        res.status(200).json({result: 'success', data: sunset});
+
+        const collectionFiles = db.collection('images00.files');
+        const collectionChunks = db.collection('images00.chunks');
+
+        collectionFiles.find({filename: sunset.sunsetImage}).toArray(function(err, docs) {
+            if (err) {
+                res.status(400).json({result: 'error', message: 'Failed to find sunset image in files.'});
+                return;
+            }
+
+            if (!docs || docs.length == 0) {
+                res.status(404).json({result: 'error', message: 'No file found.'});
+                return;
+            }
+
+            collectionChunks.find({files_id: docs[0]._id})
+            .sort({n: 1}).toArray(function(err, chunks) {
+                if (err) {
+                    res.status(400).json({result: 'error', message: 'Failed to find sunset image in chunks.'});
+                    return;
+                }
+
+                if (!chunks || chunks.length == 0) {
+                    res.status(404).json({result: 'error', message: 'No file found.'});
+                    return;
+                }
+
+                let fileData = [];
+                for (let i = 0; i < chunks.length; i++) {
+                    fileData.push(chunks[i].data.toString('base64'));
+                }
+                const finalData = {
+                    username: sunset.username,
+                    description: sunset.description,
+                    sunsetImage: `data:${docs[0].contentType};base64,${fileData.join('')}`
+                }
+                debuglog('LOG', 'sunset controller - get sunset', 'found sunset post');
+                res.status(200).json({result: 'success', message: 'Found sunset post.', data: finalData})
+            })
+        })
     }).catch(err => { // catch errors
         debuglog('ERROR', 'user controller - getUserInfo', err);
         res.status(400).json(err);
