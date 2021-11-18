@@ -37,6 +37,7 @@ router.post('/sunset/getSunsetById', sunsetsCtrl.getSunsetById);
 router.post('/friend/sendFriendRequest', friendsCtrl.sendFriendRequest);
 router.post('/friend/acceptFriendRequest', friendsCtrl.acceptFriendRequest);
 router.post('/friend/rejectFriendRequest', friendsCtrl.rejectFriendRequest);
+router.post('/friend/removeFriend', friendsCtrl.removeFriend);
 
 export {
     router

@@ -2,7 +2,6 @@
  * @fileoverview friend.controller.ts
  * This file contains all the controller functions for the friend collection.
  * @todo removeFriend function
- * @todo sendFriendREquest -- only work if it doesn't already exist
  */
 
 /* import dependencies */
@@ -190,4 +189,46 @@ export function rejectFriendRequest(req: Request, res: Response): void {
         res.status(400).json(err);
         return;
     });
+}
+
+/**
+ * @description Recipient removes requester as a friend
+ * @param {ObjectId} req.body.requester Requester
+ * @param {ObjectId} req.body.recipient Recipient
+ */
+export function removeFriend(req: Request, res: Response): void {
+    if (!req.body.requester || !req.body.recipient) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        requester: new mongoose.Types.ObjectId(req.body.requester),
+        recipient: new mongoose.Types.ObjectId(req.body.recipient)
+    };
+
+    User.find({'_id': { $in: [body.requester, body.recipient]}})
+    .then(doc => {
+        if (doc.length != 2) {
+            debuglog('ERROR', 'friend controller - remove', 'user(s) do not exist');
+            res.status(404).json({result: 'error', message: 'User(s) do not exist.'});
+            return;
+        }
+
+        let index: number;
+        index = doc[0].friends.indexOf(doc[1]._id, 0);
+        if (index > -1) {
+            doc[0].friends.splice(index, 1);
+        }
+        index = doc[1].friends.indexOf(doc[0]._id, 0);
+        if (index > -1) {
+            doc[1].friends.splice(index, 1);
+        }
+
+        doc[0].save();
+        doc[1].save();
+
+        debuglog('LOG', 'friend controller - remove', 'friend successfully removed');
+        res.status(200).json({result: 'success', message: 'Friend successfully removed.'});
+    })
 }
