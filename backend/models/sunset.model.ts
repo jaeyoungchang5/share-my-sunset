@@ -4,10 +4,10 @@
  */
 
 /* import dependencies */
-import { Document, Schema, Model, model } from 'mongoose';
+import mongoose, { Document, Schema, Model, model } from 'mongoose';
 
 interface ISunset {
-    username: string,
+    userId: mongoose.Types.ObjectId,
     sunsetImage: string,
     description: string
 }
@@ -15,8 +15,9 @@ interface ISunset {
 interface ISunsetModel extends ISunset, Document { }
 
 const SunsetSchema: Schema = new Schema({
-    username: {
-        type: String,
+    userId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     sunsetImage: {

@@ -206,7 +206,7 @@ export function updateUserPassword(req: Request, res: Response) {
         }
 
     }).catch(err => { // catch errors
-        debuglog('ERROR', 'user controller - login', err);
+        debuglog('ERROR', 'user controller - put user password', err);
         res.status(400).json(err);
         return;
     });

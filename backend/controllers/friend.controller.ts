@@ -1,7 +1,6 @@
 /**
  * @fileoverview friend.controller.ts
  * This file contains all the controller functions for the friend collection.
- * @todo removeFriend function
  */
 
 /* import dependencies */

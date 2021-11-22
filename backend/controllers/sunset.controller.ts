@@ -13,19 +13,18 @@ import mongoose from 'mongoose';
 
 /**
  * @description Post a new sunset
- * @param {string} req.body.username User's username
- * @param {string} req.body.type Type of post (written, image, video)
- * @param {Object} req.body.content Content of post
+ * @param {ObjectId} req.body.userId User's Id
+ * @param {string} req.body.description Description of post (a caption)
+ * @param {Object} req.file Content of post
  */
 export function shareSunset(req: Request, res: Response): void {
-    if (!req.body.username || !req.body.description || !req.file) {
+    if (!req.body.userId || !req.body.description || !req.file) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
     }
-    console.log(req.file);
 
     const body = {
-        username: req.body.username.toLowerCase(),
+        userId: new mongoose.Types.ObjectId(req.body.userId),
         description: req.body.description,
         sunsetImage: req.file.filename
     };
@@ -94,7 +93,7 @@ export function getSunsetById(req: Request, res: Response) {
                     fileData.push(chunks[i].data.toString('base64'));
                 }
                 const finalData = {
-                    username: sunset.username,
+                    userId: sunset.userId,
                     description: sunset.description,
                     sunsetImage: `data:${docs[0].contentType};base64,${fileData.join('')}`
                 }
@@ -103,7 +102,7 @@ export function getSunsetById(req: Request, res: Response) {
             })
         })
     }).catch(err => { // catch errors
-        debuglog('ERROR', 'user controller - getUserInfo', err);
+        debuglog('ERROR', 'sunset controller - get sunset', err);
         res.status(400).json(err);
         return;
     })
