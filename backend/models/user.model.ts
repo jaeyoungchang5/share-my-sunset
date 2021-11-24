@@ -12,8 +12,11 @@ interface IUser {
     lastName: string,
     username: string,
     password: string,
+    bio: string,
+    privacyMode: number,
     friends: mongoose.Types.ObjectId[],
-    friendRequests: mongoose.Types.ObjectId[]
+    friendRequests: mongoose.Types.ObjectId[],
+    posts: mongoose.Types.ObjectId[],
 }
 
 export interface IUserModel extends IUser, Document {
@@ -39,6 +42,19 @@ const UserSchema: Schema = new Schema({
         type: String,
         required: true
     },
+    bio: {
+        type: String,
+        default: ""
+    },
+    privacyMode: {
+        type: Number,
+        default: 0,
+        enum: [
+            0, // private
+            1, // public 
+            2  // archive
+        ]
+    },
     friends: [{
         type: mongoose.Types.ObjectId,
         ref: 'User'
@@ -46,6 +62,10 @@ const UserSchema: Schema = new Schema({
     friendRequests: [{
         type: mongoose.Types.ObjectId,
         ref: 'Friend'
+    }],
+    sunsets: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Sunset'
     }]
 });
 

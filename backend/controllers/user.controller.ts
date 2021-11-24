@@ -22,6 +22,8 @@ import mongoose from 'mongoose';
  * @param {string} req.body.lastName    User's last name
  * @param {string} req.body.username    User's username
  * @param {string} req.body.password    User's password
+ * @param {string} req.body.bio         User's bio
+ * @param {string} req.body.privacyMode User's privacy mode
  */
 export function signup(req: Request, res: Response): void{
     if (!req.body.firstName || !req.body.lastName|| !req.body.username || !req.body.password) {
@@ -34,6 +36,8 @@ export function signup(req: Request, res: Response): void{
         lastName: req.body.lastName,
         username: req.body.username.toLowerCase(),
         password: req.body.password,
+        bio: req.body.bio,
+        privacyMode: req.body.privacyMode
     }
 
     const user = new User(body);
@@ -104,7 +108,7 @@ export function getUserInfo(req: Request, res: Response){
         userId: new mongoose.Types.ObjectId(req.body.userId)
     }
 
-    User.findById(body.userId).select('username firstName lastName')
+    User.findById(body.userId).select('username firstName lastName bio')
     .then(userData => {
         if (userData){
             debuglog('LOG', 'user controller - getUserInfo', 'got user info');
@@ -135,7 +139,7 @@ export function updateUserInfo(req: Request, res: Response){
     let body: {[key:string]: any} = {};
     let key: string
     for (key in req.body) {
-        if (req.body[key] == undefined || key == 'password' || key == '_id' || key == 'friends' || key == 'friendRequests') {
+        if (req.body[key] == undefined || key == 'password' || key == '_id' || key == 'friends' || key == 'friendRequests' || key == 'posts') {
             continue;
         }
         if (key == 'username') {
