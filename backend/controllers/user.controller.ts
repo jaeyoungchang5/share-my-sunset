@@ -209,10 +209,7 @@ export function updateUserPassword(req: Request, res: Response) {
                 debuglog('LOG', 'user controller - put user password', 'updated password');
                 const token = createToken(newUser);
                 res.status(201).json({result: 'success', message: 'Update password successful.', token: token});
-            }).catch(err => { // catch errors
-                debuglog('ERROR', 'user controller - put user password', err);
-                res.status(400).json(err);
-            });
+            })
         } else {
             debuglog('LOG', 'user controller - put user password', 'found user, incorrect password');
             res.status(401).json({result: 'error', message: 'Incorrect password, update password unauthorized.'});
@@ -281,11 +278,7 @@ export function adminUpdateUserPassword(req: Request, res: Response) {
             debuglog('LOG', 'user controller - admin put user password', 'updated password');
             const token = createToken(newUser);
             res.status(201).json({result: 'success', message: 'Admin update password successful.', token: token});
-        }).catch(err => { // catch errors
-            debuglog('ERROR', 'user controller - admin put user password', err);
-            res.status(400).json(err);
-        });
-
+        })
     }).catch(err => { // catch errors
         debuglog('ERROR', 'user controller - admin put user password', err);
         res.status(400).json(err);
