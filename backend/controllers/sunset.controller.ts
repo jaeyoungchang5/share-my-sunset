@@ -1,7 +1,7 @@
 /**
  * @fileoverview sunset.controller.ts
  * This file contains all the controller functions for the sunset collection.
- * Functions: shareSunset, getSunsetById, getSunsetsByUserId
+ * Functions: shareSunset, getSunsetById, getSunsetsByUserId, deleteSunset
  */
 
 /* import dependencies */
@@ -18,6 +18,7 @@ import mongoose from 'mongoose';
  * @param {Object} req.file Content of post
  */
 export function shareSunset(req: Request, res: Response): void {
+    console.log(req.body);
     if (!req.body.userId || !req.body.description || !req.file) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
@@ -65,18 +66,15 @@ export function getSunsetById(req: Request, res: Response) {
         const collectionFiles = db.collection('images00.files');
         const collectionChunks = db.collection('images00.chunks');
 
-        collectionFiles.find({filename: sunset.sunsetImage}).toArray(function(err, docs) {
-            if (err) {
-                res.status(400).json({result: 'error', message: 'Failed to find sunset image in files.'});
-                return;
-            }
+        collectionFiles.findOne({filename: sunset.sunsetImage})
+        .then(doc => {
 
-            if (!docs || docs.length == 0) {
+            if (!doc) {
                 res.status(404).json({result: 'error', message: 'No file found.'});
                 return;
             }
 
-            collectionChunks.find({files_id: docs[0]._id})
+            collectionChunks.find({files_id: doc._id})
             .sort({n: 1}).toArray(function(err, chunks) {
                 if (err) {
                     res.status(400).json({result: 'error', message: 'Failed to find sunset image in chunks.'});
@@ -95,7 +93,7 @@ export function getSunsetById(req: Request, res: Response) {
                 const finalData = {
                     userId: sunset.userId,
                     description: sunset.description,
-                    sunsetImage: `data:${docs[0].contentType};base64,${fileData.join('')}`
+                    sunsetImage: `data:${doc.contentType};base64,${fileData.join('')}`
                 }
                 debuglog('LOG', 'sunset controller - get sunset by id', 'found sunset post');
                 res.status(200).json({result: 'success', message: 'Found sunset post.', data: finalData})
@@ -133,6 +131,53 @@ export function getSunsetIdsByUserId(req: Request, res: Response) {
         res.status(200).json({result: 'success', message: 'Found sunset posts.', data: sunsetIds})
     }).catch(err => { // catch errors
         debuglog('ERROR', 'sunset controller - get sunset by user id', err);
+        res.status(400).json(err);
+        return;
+    })
+}
+
+/**
+ * @description Delete sunset by its id
+ * @param {ObjectId} req.body.sunsetId The _id of the sunset
+ */
+export function deleteSunset(req: Request, res: Response) {
+    if (!req.body.sunsetId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        sunsetId: new mongoose.Types.ObjectId(req.body.sunsetId)
+    };
+
+    Sunset.findOneAndDelete({_id: body.sunsetId})
+    .then(sunset => {
+        if (!sunset) {
+            debuglog('ERROR', 'sunset controller - delete sunset', 'could not find post');
+            res.status(404).json({result: 'error', message: 'Could not find sunset post.'});
+            return;
+        }
+        console.log(sunset);
+
+        const collectionFiles = db.collection('images00.files');
+        const collectionChunks = db.collection('images00.chunks');
+
+        collectionFiles.findOne({filename: sunset.sunsetImage})
+        .then(doc => {
+            if (!doc) {
+                res.status(404).json({result: 'error', message: 'No file found.'});
+                return;
+            }
+
+
+            collectionFiles.deleteOne({filename: sunset.sunsetImage});
+            collectionChunks.deleteMany({files_id: doc._id});
+            console.log('done');
+        })
+        debuglog('LOG', 'sunset controller - delete sunset', 'successfully deleted sunset post');
+        res.status(200).json({result: 'success', message: 'Successfully deleted sunset post.'});
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'sunset controller - delete sunset', err);
         res.status(400).json(err);
         return;
     })
