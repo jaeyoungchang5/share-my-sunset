@@ -1,7 +1,13 @@
 /**
  * @fileoverview user.controller.ts
  * This file contains all the controller functions for the user collection.
- * Functions: signup, login, getUserInfo, updateUserInfo, updateUserPassword, adminUpdateUserPassword
+ * Functions: 
+    ** signup 
+    ** login 
+    ** getUserInfo 
+    ** updateUserInfo 
+    ** updateUserPassword 
+    ** adminUpdateUserPassword
  */
 
 /* import dependencies */

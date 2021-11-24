@@ -1,8 +1,12 @@
 /**
  * @fileoverview sunset.controller.ts
  * This file contains all the controller functions for the sunset collection.
- * Functions: shareSunset, getSunsetById, getSunsetsByUserId, deleteSunset
- */
+ * Functions: 
+    ** shareSunset 
+    ** getSunsetById 
+    ** getSunsetIdsByUserId 
+    ** deleteSunset
+*/
 
 /* import dependencies */
 import { debuglog } from '../helpers';

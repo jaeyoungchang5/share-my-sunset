@@ -1,7 +1,11 @@
 /**
  * @fileoverview friend.controller.ts
  * This file contains all the controller functions for the friend collection.
- * Functions: sendFriendRequest, acceptFriendRequest, rejectFriendRequest, removeFriend
+ * Functions: 
+    ** sendFriendRequest
+    ** acceptFriendRequest
+    ** rejectFriendRequest
+    ** removeFriend
  */
 
 /* import dependencies */
@@ -42,7 +46,7 @@ export function sendFriendRequest(req: Request, res: Response): void {
             recipient = doc[0];
         }
 
-        if (requester.friends.includes(recipient._id)) {
+        if (requester.friends.includes(recipient._id) || recipient.friends.includes(requester._id)) {
             debuglog('ERROR', 'friend controller - sendFriendRequest', 'users are already friends');
             res.status(400).json({result: 'error', message: 'Users are already friends.'});
             return;
