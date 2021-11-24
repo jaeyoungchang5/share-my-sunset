@@ -1,6 +1,7 @@
 /**
  * @fileoverview friend.controller.ts
  * This file contains all the controller functions for the friend collection.
+ * Functions: sendFriendRequest, acceptFriendRequest, rejectFriendRequest, removeFriend
  */
 
 /* import dependencies */
