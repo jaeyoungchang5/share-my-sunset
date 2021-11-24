@@ -28,6 +28,7 @@ router.post('/login', usersCtrl.login);
 router.post('/user/getInfo', usersCtrl.getUserInfo);
 router.post('/user/updateInfo', usersCtrl.updateUserInfo);
 router.post('/user/updatePassword', usersCtrl.updateUserPassword);
+router.post('/admin/updateUserPassword', usersCtrl.adminUpdateUserPassword);
 
 // sunsets
 router.post('/sunset', upload.single('sunsetImage'), sunsetsCtrl.shareSunset);

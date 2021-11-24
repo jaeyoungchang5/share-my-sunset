@@ -1,7 +1,7 @@
 /**
  * @fileoverview user.controller.ts
  * This file contains all the controller functions for the user collection.
- * Functions: signup, login, getUserInfo, updateUserInfo, updateUserPassword
+ * Functions: signup, login, getUserInfo, updateUserInfo, updateUserPassword, adminUpdateUserPassword
  */
 
 /* import dependencies */
@@ -34,7 +34,7 @@ export function signup(req: Request, res: Response): void{
     .then(newUser => {
         debuglog('LOG', 'user controller - signup', 'signed up new user');
         const token = createToken(newUser);
-        res.status(201).json({result: 'success', message: 'New user signup successful.', token: token});
+        res.status(201).json({result: 'success', message: 'New user signup successful.', userId: newUser._id, token: token});
     }).catch(err => { // catch errors
         debuglog('ERROR', 'user controller - signup', err);
         res.status(400).json(err);
@@ -71,7 +71,7 @@ export function login(req: Request, res: Response){
             debuglog('LOG', 'user controller - login', 'found user, correct password');
             const token = createToken(foundUser);
             res.header('auth-token', token);
-            res.status(201).json({result: 'success', message: 'Login successful.', token: token});
+            res.status(201).json({result: 'success', message: 'Login successful.', userId: foundUser._id, token: token});
         } else {
             debuglog('LOG', 'user controller - login', 'found user, incorrect password');
             res.status(401).json({result: 'error', message: 'Incorrect password, login unauthorized.'});
@@ -202,6 +202,48 @@ export function updateUserPassword(req: Request, res: Response) {
 
     }).catch(err => { // catch errors
         debuglog('ERROR', 'user controller - put user password', err);
+        res.status(400).json(err);
+        return;
+    });
+}
+
+/**
+ * @description Update user password - admin
+ * @param {string} req.body.username User's username
+ * @param {string} req.body.newPassword User's new password
+ */
+export function adminUpdateUserPassword(req: Request, res: Response) {
+    if (!req.body.username || !req.body.newPassword) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        username: req.body.username.toLowerCase(),
+        newPassword: req.body.newPassword
+    };
+
+    User.findOne({username: body.username})
+    .then(foundUser => {
+        if (!foundUser){
+            debuglog('ERROR', 'user controller - admin put user password', 'user username not found');
+            res.status(404).json({result: 'error', message: 'Username not found.'});
+            return;
+        }
+
+        foundUser.password = body.newPassword;
+        foundUser.save()
+        .then(newUser => {
+            debuglog('LOG', 'user controller - admin put user password', 'updated password');
+            const token = createToken(newUser);
+            res.status(201).json({result: 'success', message: 'Admin update password successful.', token: token});
+        }).catch(err => { // catch errors
+            debuglog('ERROR', 'user controller - admin put user password', err);
+            res.status(400).json(err);
+        });
+
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'user controller - admin put user password', err);
         res.status(400).json(err);
         return;
     });
