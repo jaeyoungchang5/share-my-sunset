@@ -10,9 +10,10 @@ import { debuglog } from '../helpers';
 import { upload } from '../config';
 
 /* link controllers */
-import * as usersCtrl from '../controllers/user.controller';
-import * as sunsetsCtrl from '../controllers/sunset.controller';
-import * as friendsCtrl from '../controllers/friend.controller';
+import * as userCtrl from '../controllers/user.controller';
+import * as sunsetCtrl from '../controllers/sunset.controller';
+import * as friendCtrl from '../controllers/friend.controller';
+import * as feedCtrl from '../controllers/feed.controller';
 
 /* ROUTE ENDPOINTS */
 
@@ -23,25 +24,28 @@ router.get('/test', (req: Request, res: Response): void => {
 });
 
 // users
-router.post('/signup', usersCtrl.signup);
-router.post('/login', usersCtrl.login);
-router.post('/user/getInfo', usersCtrl.getUserInfo);
-router.post('/user/updateInfo', usersCtrl.updateUserInfo);
-router.post('/user/updatePassword', usersCtrl.updateUserPassword);
-router.post('/admin/updateUserPassword', usersCtrl.adminUpdateUserPassword);
+router.post('/signup', userCtrl.signup);
+router.post('/login', userCtrl.login);
+router.post('/user/getInfo', userCtrl.getUserInfo);
+router.post('/user/updateInfo', userCtrl.updateUserInfo);
+router.post('/user/updatePassword', userCtrl.updateUserPassword);
+router.post('/admin/updateUserPassword', userCtrl.adminUpdateUserPassword);
 
 // sunsets
-router.post('/sunset', upload.single('sunsetImage'), sunsetsCtrl.shareSunset);
-router.post('/sunset/getSunsetById', sunsetsCtrl.getSunsetById);
-router.post('/sunset/getSunsetIdsByUserId', sunsetsCtrl.getSunsetIdsByUserId);
-router.post('/sunset/deleteSunset', sunsetsCtrl.deleteSunset);
-router.post('/sunset/updateSunsetCaption', sunsetsCtrl.updateSunsetCaption);
+router.post('/sunset', upload.single('sunsetImage'), sunsetCtrl.shareSunset);
+router.post('/sunset/getSunsetById', sunsetCtrl.getSunsetById);
+router.post('/sunset/getSunsetIdsByUserId', sunsetCtrl.getSunsetIdsByUserId);
+router.post('/sunset/deleteSunset', sunsetCtrl.deleteSunset);
+router.post('/sunset/updateSunsetCaption', sunsetCtrl.updateSunsetCaption);
 
 // friends
-router.post('/friend/sendFriendRequest', friendsCtrl.sendFriendRequest);
-router.post('/friend/acceptFriendRequest', friendsCtrl.acceptFriendRequest);
-router.post('/friend/rejectFriendRequest', friendsCtrl.rejectFriendRequest);
-router.post('/friend/removeFriend', friendsCtrl.removeFriend);
+router.post('/friend/sendFriendRequest', friendCtrl.sendFriendRequest);
+router.post('/friend/acceptFriendRequest', friendCtrl.acceptFriendRequest);
+router.post('/friend/rejectFriendRequest', friendCtrl.rejectFriendRequest);
+router.post('/friend/removeFriend', friendCtrl.removeFriend);
+
+// feed
+router.post('/getFeed', feedCtrl.getFeed);
 
 export {
     router
