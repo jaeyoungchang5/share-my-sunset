@@ -4,7 +4,7 @@
  */
 
 /* import dependencies */
-import mongoose, { Document, Schema, Model, model, ObjectId } from 'mongoose';
+import mongoose, { Document, Schema, Model, model } from 'mongoose';
 
 interface IFriendRequest {
     requester: mongoose.Types.ObjectId,

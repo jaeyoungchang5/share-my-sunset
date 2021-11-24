@@ -4,7 +4,7 @@
  */
 
 /* import dependencies */
-import mongoose, { Document, Schema, Model, model, ObjectId, Mongoose } from 'mongoose';
+import mongoose, { Document, Schema, Model, model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 interface IUser {
