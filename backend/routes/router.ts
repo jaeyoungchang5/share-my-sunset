@@ -32,6 +32,7 @@ router.post('/user/updatePassword', usersCtrl.updateUserPassword);
 // sunsets
 router.post('/sunset', upload.single('sunsetImage'), sunsetsCtrl.shareSunset);
 router.post('/sunset/getSunsetById', sunsetsCtrl.getSunsetById);
+router.post('/sunset/getSunsetIdsByUserId', sunsetsCtrl.getSunsetIdsByUserId);
 
 // friends
 router.post('/friend/sendFriendRequest', friendsCtrl.sendFriendRequest);

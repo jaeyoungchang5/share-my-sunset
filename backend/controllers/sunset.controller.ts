@@ -1,7 +1,6 @@
 /**
  * @fileoverview sunset.controller.ts
  * This file contains all the controller functions for the sunset collection.
- * @todo Get sunsets by username
  */
 
 /* import dependencies */
@@ -57,7 +56,7 @@ export function getSunsetById(req: Request, res: Response) {
     Sunset.findById(body._id)
     .then(sunset => {
         if (!sunset) {
-            debuglog('ERROR', 'sunset controller - get sunset', 'could not find post');
+            debuglog('ERROR', 'sunset controller - get sunset by id', 'could not find post');
             res.status(404).json({result: 'error', message: 'Could not find sunset post.'});
             return;
         }
@@ -97,12 +96,42 @@ export function getSunsetById(req: Request, res: Response) {
                     description: sunset.description,
                     sunsetImage: `data:${docs[0].contentType};base64,${fileData.join('')}`
                 }
-                debuglog('LOG', 'sunset controller - get sunset', 'found sunset post');
+                debuglog('LOG', 'sunset controller - get sunset by id', 'found sunset post');
                 res.status(200).json({result: 'success', message: 'Found sunset post.', data: finalData})
             })
         })
     }).catch(err => { // catch errors
-        debuglog('ERROR', 'sunset controller - get sunset', err);
+        debuglog('ERROR', 'sunset controller - get sunset by id', err);
+        res.status(400).json(err);
+        return;
+    })
+}
+
+/**
+ * @description Get sunset Ids by it's User ID
+ * @param {ObjectId} req.body.userId The _id of the user
+ */
+export function getSunsetIdsByUserId(req: Request, res: Response) {
+    if (!req.body.userId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+    const body = {
+        userId: new mongoose.Types.ObjectId(req.body.userId)
+    };
+
+    Sunset.find({userId: body.userId}).select('_id')
+    .then(sunsetIds => {
+        if (!sunsetIds) {
+            debuglog('LOG', 'sunset controller - get sunset by user id', 'User has no posts');
+            res.status(200).json({result: 'success', message: 'User has no posts.', data: sunsetIds});
+            return;
+        }
+
+        debuglog('LOG', 'sunset controller - get sunset by user id', 'found sunset posts');
+        res.status(200).json({result: 'success', message: 'Found sunset posts.', data: sunsetIds})
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'sunset controller - get sunset by user id', err);
         res.status(400).json(err);
         return;
     })

@@ -96,17 +96,11 @@ export function getUserInfo(req: Request, res: Response){
         username: req.body.username.toLowerCase()
     }
 
-    User.findOne({username: body.username})
+    User.findOne({username: body.username}).select('username firstName lastName _id')
     .then(userData => {
         if (userData){
-            const returnData = {
-                username: userData.username,
-                firstName: userData.firstName,
-                lastName: userData.lastName,
-                _id: userData._id
-            }
             debuglog('LOG', 'user controller - getUserInfo', 'got user info');
-            res.status(200).json({result: 'success', data: returnData});
+            res.status(200).json({result: 'success', data: userData});
         } else {
             debuglog('ERROR', 'user controller - getUserInfo', 'username not found');
             res.status(404).json({result: 'error', message: 'Username not found.'});
