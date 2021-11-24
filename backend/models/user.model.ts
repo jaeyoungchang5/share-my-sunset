@@ -17,6 +17,7 @@ interface IUser {
     friends: mongoose.Types.ObjectId[],
     friendRequests: mongoose.Types.ObjectId[],
     sunsets: mongoose.Types.ObjectId[],
+    isDeleted: boolean,
 }
 
 export interface IUserModel extends IUser, Document {
@@ -65,7 +66,11 @@ const UserSchema: Schema = new Schema({
     sunsets: [{
         type: mongoose.Types.ObjectId,
         ref: 'Sunset'
-    }]
+    }],
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 });
 
 /**

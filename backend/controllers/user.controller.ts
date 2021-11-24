@@ -7,6 +7,7 @@
     ** getUserInfo 
     ** updateUserInfo 
     ** updateUserPassword 
+    ** deleteUser
     ** adminUpdateUserPassword
  */
 
@@ -69,11 +70,11 @@ export function login(req: Request, res: Response){
     }
 
     debuglog('LOG', 'user controller - login', 'attempting login');
-    User.findOne({username: body.username})
+    User.findOne({username: body.username, isDeleted: false})
     .then(foundUser => {
         if (!foundUser){
-            debuglog('ERROR', 'user controller - login', 'username not found');
-            res.status(404).json({result: 'error', message: 'Username not found.'});
+            debuglog('ERROR', 'user controller - login', 'user not found');
+            res.status(404).json({result: 'error', message: 'User not found.'});
             return;
         }
 
@@ -108,7 +109,7 @@ export function getUserInfo(req: Request, res: Response){
         userId: new mongoose.Types.ObjectId(req.body.userId)
     }
 
-    User.findById(body.userId).select('username firstName lastName bio')
+    User.findOne({_id: body.userId, isDeleted: false}).select('username firstName lastName bio')
     .then(userData => {
         if (userData){
             debuglog('LOG', 'user controller - getUserInfo', 'got user info');
@@ -139,7 +140,8 @@ export function updateUserInfo(req: Request, res: Response){
     let body: {[key:string]: any} = {};
     let key: string
     for (key in req.body) {
-        if (req.body[key] == undefined || key == 'password' || key == '_id' || key == 'friends' || key == 'friendRequests' || key == 'sunsets') {
+        const dontTouch: string[] = ['password', '_id', 'friends', 'friendRequests', 'sunsets', 'isDeleted'];
+        if (req.body[key] == undefined || dontTouch.includes(key)) {
             continue;
         }
         if (key == 'username') {
@@ -155,7 +157,7 @@ export function updateUserInfo(req: Request, res: Response){
         return;
     }
 
-    User.updateOne({_id: userId}, {$set: body})
+    User.updateOne({_id: userId, isDeleted: false}, {$set: body})
     .then(dbResponse => {
         if (dbResponse.modifiedCount == 1){
             debuglog('LOG', 'user controller - updateUserInfo', 'updated user info');
@@ -191,7 +193,7 @@ export function updateUserPassword(req: Request, res: Response) {
         newPassword: req.body.newPassword
     };
 
-    User.findById(body.userId)
+    User.findOne({_id: body.userId, isDeleted: false})
     .then(foundUser => {
         if (!foundUser){
             debuglog('ERROR', 'user controller - put user password', 'user username not found');
@@ -220,6 +222,32 @@ export function updateUserPassword(req: Request, res: Response) {
         debuglog('ERROR', 'user controller - put user password', err);
         res.status(400).json(err);
         return;
+    });
+}
+
+/**
+ * @description Delete user
+ * @param {ObjectId} req.body.userId User's id
+ */
+export function deleteUser(req: Request, res: Response){
+    if (!req.body.userId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+    const userId = new mongoose.Types.ObjectId(req.body.userId);
+
+    User.updateOne({_id: userId, isDeleted: false}, {$set: {isDeleted: true}})
+    .then(dbResponse => {
+        if (dbResponse.modifiedCount == 1){
+            debuglog('LOG', 'user controller - deleteUser', 'deleted user');
+            res.status(201).json({result: 'success', message: 'Delete user successful.'});
+        } else if (dbResponse.matchedCount == 0) {
+            debuglog('LOG', 'user controller - deleteUser', 'user not found');
+            res.status(404).json({ result: 'error', message: 'User not found.' });
+        }
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'user controller - deleteUser', err);
+        res.status(400).json(err.message);
     });
 }
 

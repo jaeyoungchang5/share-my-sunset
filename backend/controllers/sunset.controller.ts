@@ -34,7 +34,7 @@ export function shareSunset(req: Request, res: Response): void {
         sunsetImage: req.file.filename
     };
 
-    User.findById(body.userId)
+    User.findOne({_id: body.userId, isDeleted: false})
     .then(foundUser => {
         if (!foundUser){
             debuglog('ERROR', 'sunset controller - share', 'user not found');
@@ -191,7 +191,7 @@ export function deleteSunset(req: Request, res: Response) {
             collectionChunks.deleteMany({files_id: doc._id});
         })
 
-        User.findById(sunset.userId)
+        User.findOne({_id: sunset.userId, isDeleted: false})
         .then(foundUser => {
             const index = foundUser.sunsets.indexOf(sunset._id, 0);
             if (index > -1) {

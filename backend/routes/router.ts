@@ -29,6 +29,7 @@ router.post('/login', userCtrl.login);
 router.post('/user/getInfo', userCtrl.getUserInfo);
 router.post('/user/updateInfo', userCtrl.updateUserInfo);
 router.post('/user/updatePassword', userCtrl.updateUserPassword);
+router.post('/user/deleteUser', userCtrl.deleteUser);
 router.post('/admin/updateUserPassword', userCtrl.adminUpdateUserPassword);
 
 // sunsets
