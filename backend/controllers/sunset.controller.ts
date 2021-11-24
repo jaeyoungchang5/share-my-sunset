@@ -6,6 +6,7 @@
     ** getSunsetById 
     ** getSunsetIdsByUserId 
     ** deleteSunset
+    ** updateSunsetCaption
 */
 
 /* import dependencies */
@@ -185,4 +186,35 @@ export function deleteSunset(req: Request, res: Response) {
         res.status(400).json(err);
         return;
     })
+}
+
+/**
+ * @description Update sunset caption
+ * @param {ObjectId} req.body.sunsetId The _id of the sunset
+ * @param {string} req.body.description The new description
+ */
+export function updateSunsetCaption(req: Request, res: Response) {
+    if (!req.body.sunsetId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        description: req.body.description
+    }
+
+    Sunset.updateOne({_id: req.body.sunsetId}, {$set: body})
+    .then(dbResponse => {
+        if (dbResponse.modifiedCount == 1){
+            debuglog('LOG', 'sunset controller - update caption', 'updated sunset caption');
+            res.status(201).json({result: 'success', message: 'Sunset caption update successful.'});
+        } else if (dbResponse.matchedCount == 0) {
+            debuglog('LOG', 'sunset controller - update caption', 'sunset not found');
+            res.status(404).json({ result: 'error', message: 'Sunset not found.' });
+        }
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'sunset controller - update sunset caption', err);
+        res.status(400).json(err.message);
+    });
+
 }

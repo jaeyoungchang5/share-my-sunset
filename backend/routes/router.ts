@@ -35,6 +35,7 @@ router.post('/sunset', upload.single('sunsetImage'), sunsetsCtrl.shareSunset);
 router.post('/sunset/getSunsetById', sunsetsCtrl.getSunsetById);
 router.post('/sunset/getSunsetIdsByUserId', sunsetsCtrl.getSunsetIdsByUserId);
 router.post('/sunset/deleteSunset', sunsetsCtrl.deleteSunset);
+router.post('/sunset/updateSunsetCaption', sunsetsCtrl.updateSunsetCaption);
 
 // friends
 router.post('/friend/sendFriendRequest', friendsCtrl.sendFriendRequest);
