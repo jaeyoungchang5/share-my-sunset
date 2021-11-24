@@ -139,7 +139,7 @@ export function updateUserInfo(req: Request, res: Response){
     let body: {[key:string]: any} = {};
     let key: string
     for (key in req.body) {
-        if (req.body[key] == undefined || key == 'password' || key == '_id' || key == 'friends' || key == 'friendRequests' || key == 'posts') {
+        if (req.body[key] == undefined || key == 'password' || key == '_id' || key == 'friends' || key == 'friendRequests' || key == 'sunsets') {
             continue;
         }
         if (key == 'username') {

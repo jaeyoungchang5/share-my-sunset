@@ -101,8 +101,8 @@ export function acceptFriendRequest(req: Request, res: Response): void {
     FriendRequest.findOneAndRemove({ requester: body.requester, recipient: body.recipient, status: 1 })
     .then(friendObject => {
         if (!friendObject) {
-            debuglog('ERROR', 'friend controller - acceptFriendRequest', 'Friend request no longer exists');
-            res.status(400).json({result: 'error', message: 'Friend request no longer exists.'});
+            debuglog('ERROR', 'friend controller - acceptFriendRequest', 'Friend request does not exists');
+            res.status(400).json({result: 'error', message: 'Friend request does not exists.'});
             return;
         }
 
@@ -159,8 +159,8 @@ export function rejectFriendRequest(req: Request, res: Response): void {
     FriendRequest.findOneAndRemove({ requester: body.requester, recipient: body.recipient, status: 1 })
     .then(friendObject => {
         if (!friendObject) {
-            debuglog('ERROR', 'friend controller - rejectFriendRequest', 'Friend request no longer exists');
-            res.status(400).json({result: 'error', message: 'Friend request no longer exists.'});
+            debuglog('ERROR', 'friend controller - rejectFriendRequest', 'Friend request does not exists');
+            res.status(400).json({result: 'error', message: 'Friend request does not exists.'});
             return;
         }
 

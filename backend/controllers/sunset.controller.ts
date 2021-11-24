@@ -12,7 +12,7 @@
 /* import dependencies */
 import { debuglog } from '../helpers';
 import { db } from '../config';
-import { Sunset } from '../models';
+import { User, Sunset } from '../models';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 
@@ -23,7 +23,6 @@ import mongoose from 'mongoose';
  * @param {Object} req.file Content of post
  */
 export function shareSunset(req: Request, res: Response): void {
-    console.log(req.body);
     if (!req.body.userId || !req.body.description || !req.file) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
@@ -35,9 +34,23 @@ export function shareSunset(req: Request, res: Response): void {
         sunsetImage: req.file.filename
     };
 
-    const sunset = new Sunset(body);
-    sunset.save()
-    .then(newSunset => {
+    User.findById(body.userId)
+    .then(foundUser => {
+        if (!foundUser){
+            debuglog('ERROR', 'sunset controller - share', 'user not found');
+            res.status(404).json({result: 'error', message: 'User not found.'});
+            return;
+        }
+
+        const sunset = new Sunset(body);
+        sunset.save();
+
+        if (!foundUser.sunsets) {
+            foundUser.sunsets = [];
+        }
+        foundUser.sunsets.push(sunset._id);
+        foundUser.save();
+
         debuglog('LOG', 'sunset controller - share', 'posted new sunset');
         res.status(201).json({result: 'success', message: 'New sunset shared successfully.'});
     }).catch(err => { // catch errors
@@ -162,7 +175,6 @@ export function deleteSunset(req: Request, res: Response) {
             res.status(404).json({result: 'error', message: 'Could not find sunset post.'});
             return;
         }
-        console.log(sunset);
 
         const collectionFiles = db.collection('images00.files');
         const collectionChunks = db.collection('images00.chunks');
@@ -177,8 +189,17 @@ export function deleteSunset(req: Request, res: Response) {
 
             collectionFiles.deleteOne({filename: sunset.sunsetImage});
             collectionChunks.deleteMany({files_id: doc._id});
-            console.log('done');
         })
+
+        User.findById(sunset.userId)
+        .then(foundUser => {
+            const index = foundUser.sunsets.indexOf(sunset._id, 0);
+            if (index > -1) {
+                foundUser.sunsets.splice(index, 1);
+            }
+            foundUser.save();
+        })
+
         debuglog('LOG', 'sunset controller - delete sunset', 'successfully deleted sunset post');
         res.status(200).json({result: 'success', message: 'Successfully deleted sunset post.'});
     }).catch(err => { // catch errors
