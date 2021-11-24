@@ -14,6 +14,7 @@
 import { debuglog, createToken } from '../helpers';
 import { User } from '../models';
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
 /**
  * @description Signup a new user
@@ -40,7 +41,7 @@ export function signup(req: Request, res: Response): void{
     .then(newUser => {
         debuglog('LOG', 'user controller - signup', 'signed up new user');
         const token = createToken(newUser);
-        res.status(201).json({result: 'success', message: 'New user signup successful.', userId: newUser._id, token: token});
+        res.status(201).json({result: 'success', message: 'New user signup successful.', token: token});
     }).catch(err => { // catch errors
         debuglog('ERROR', 'user controller - signup', err);
         res.status(400).json(err);
@@ -77,7 +78,7 @@ export function login(req: Request, res: Response){
             debuglog('LOG', 'user controller - login', 'found user, correct password');
             const token = createToken(foundUser);
             res.header('auth-token', token);
-            res.status(201).json({result: 'success', message: 'Login successful.', userId: foundUser._id, token: token});
+            res.status(201).json({result: 'success', message: 'Login successful.', token: token});
         } else {
             debuglog('LOG', 'user controller - login', 'found user, incorrect password');
             res.status(401).json({result: 'error', message: 'Incorrect password, login unauthorized.'});
@@ -90,20 +91,20 @@ export function login(req: Request, res: Response){
 }
 
 /**
- * @description Get info for a user, given user's username
- * @param {string} req.body.username User's username
+ * @description Get info for a user, given user's id
+ * @param {ObjectId} req.body.userId User's id
  */
 export function getUserInfo(req: Request, res: Response){
-    if (!req.body.username) {
+    if (!req.body.userId) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
     }
 
     const body = {
-        username: req.body.username.toLowerCase()
+        userId: new mongoose.Types.ObjectId(req.body.userId)
     }
 
-    User.findOne({username: body.username}).select('username firstName lastName _id')
+    User.findById(body.userId).select('username firstName lastName')
     .then(userData => {
         if (userData){
             debuglog('LOG', 'user controller - getUserInfo', 'got user info');
@@ -121,19 +122,24 @@ export function getUserInfo(req: Request, res: Response){
 
 /**
  * @description Update user info (excluding password)
- * @param {string} req.body.username User's username
+ * @param {ObjectId} req.body.userId User's id
  * @param {Object} req.body Any fields that the user wants to update: {"key": "value", "key": "value", etc.}
  */
 export function updateUserInfo(req: Request, res: Response){
-    if (!req.body.username) {
+    if (!req.body.userId) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
     }
+    const userId = new mongoose.Types.ObjectId(req.body.userId);
 
     let body: {[key:string]: any} = {};
     let key: string
     for (key in req.body) {
-        if (req.body[key] == undefined || key == 'password') {
+        if (req.body[key] == undefined || key == 'password' || key == '_id' || key == 'friends' || key == 'friendRequests') {
+            continue;
+        }
+        if (key == 'username') {
+            body[key] = req.body[key].toLowerCase();
             continue;
         }
         body[key] = req.body[key];
@@ -145,7 +151,7 @@ export function updateUserInfo(req: Request, res: Response){
         return;
     }
 
-    User.updateOne({username: req.body.username.toLowerCase()}, {$set: body})
+    User.updateOne({_id: userId}, {$set: body})
     .then(dbResponse => {
         if (dbResponse.modifiedCount == 1){
             debuglog('LOG', 'user controller - updateUserInfo', 'updated user info');
@@ -165,23 +171,23 @@ export function updateUserInfo(req: Request, res: Response){
 
 /**
  * @description Update user password
- * @param {string} req.body.username User's username
+ * @param {ObjectId} req.body.userId User's id
  * @param {string} req.body.oldPassword User's old password
  * @param {string} req.body.newPassword User's new password
  */
 export function updateUserPassword(req: Request, res: Response) {
-    if (!req.body.username || !req.body.oldPassword || !req.body.newPassword) {
+    if (!req.body.userId || !req.body.oldPassword || !req.body.newPassword) {
         res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
         return;
     }
 
     const body = {
-        username: req.body.username.toLowerCase(),
+        userId: new mongoose.Types.ObjectId(req.body.userId),
         oldPassword: req.body.oldPassword,
         newPassword: req.body.newPassword
     };
 
-    User.findOne({username: body.username})
+    User.findById(body.userId)
     .then(foundUser => {
         if (!foundUser){
             debuglog('ERROR', 'user controller - put user password', 'user username not found');
@@ -253,6 +259,5 @@ export function adminUpdateUserPassword(req: Request, res: Response) {
         res.status(400).json(err);
         return;
     });
-
 
 }
