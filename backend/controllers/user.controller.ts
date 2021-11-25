@@ -115,8 +115,8 @@ export function getUserInfo(req: Request, res: Response){
             debuglog('LOG', 'user controller - getUserInfo', 'got user info');
             res.status(200).json({result: 'success', data: userData});
         } else {
-            debuglog('ERROR', 'user controller - getUserInfo', 'username not found');
-            res.status(404).json({result: 'error', message: 'Username not found.'});
+            debuglog('ERROR', 'user controller - getUserInfo', 'user not found');
+            res.status(404).json({result: 'error', message: 'User not found.'});
         }
     }).catch(err => { // catch errors
         debuglog('ERROR', 'user controller - getUserInfo', err);
@@ -163,8 +163,8 @@ export function updateUserInfo(req: Request, res: Response){
             debuglog('LOG', 'user controller - updateUserInfo', 'updated user info');
             res.status(201).json({result: 'success', message: 'User update successful.'});
         } else if (dbResponse.matchedCount == 0) {
-            debuglog('LOG', 'user controller - updateUserInfo', 'username not found');
-            res.status(404).json({ result: 'error', message: 'Username not found.' });
+            debuglog('LOG', 'user controller - updateUserInfo', 'user not found');
+            res.status(404).json({ result: 'error', message: 'User not found.' });
         } else if (dbResponse.modifiedCount == 0) {
             debuglog('LOG', 'user controller - updateUserInfo', 'no info updated');
             res.status(400).json({ result: 'error', message: 'No info updated.' });
@@ -196,8 +196,8 @@ export function updateUserPassword(req: Request, res: Response) {
     User.findOne({_id: body.userId, isDeleted: false})
     .then(foundUser => {
         if (!foundUser){
-            debuglog('ERROR', 'user controller - put user password', 'user username not found');
-            res.status(404).json({result: 'error', message: 'Username not found.'});
+            debuglog('ERROR', 'user controller - put user password', 'user not found');
+            res.status(404).json({result: 'error', message: 'User not found.'});
             return;
         }
 

@@ -4,10 +4,10 @@
  */
 
 /**
- * @function debuglog : function to help with consistent console logging
- * @param {string} type : type of message, either LOG or DEBUG or ERROR
- * @param {string} func : function information to help identify where the log is coming from
- * @param {string} message : console log message
+ * @description Helper function to help with consistent logging
+ * @param {string} type Type of message, either LOG or DEBUG or ERROR
+ * @param {string} func Name of controller/function
+ * @param {string} message Message
  */
 function debuglog(type: String, func: String, message: String){
     console.log(`[${type}] :: ${func} :: ${message} :: ` + new Date());
