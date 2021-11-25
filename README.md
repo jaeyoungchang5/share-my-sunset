@@ -1,6 +1,10 @@
 # share-my-sunset
 A full stack social media mobile app for users to share pictures of sunsets with their friends 🌅. Built using a MERN stack (MongoDB, Express, React, Node) with TypeScript.
 
+## Starting the Backend
+1. Set up `.env` variables.
+2. Run `node server.ts`.
+
 ## Functionality
 ### Users
 - Signup
@@ -9,7 +13,11 @@ A full stack social media mobile app for users to share pictures of sunsets with
 - Update User Info
 - Update User Password
 - Delete User
-
+### Friends
+- Send Friend Request
+- Accept Friend Request
+- Reject Friend Request
+- Remove Friend
 ### Sunsets
 - Share Sunset
 - Get Sunset (single)
@@ -18,8 +26,3 @@ A full stack social media mobile app for users to share pictures of sunsets with
 - Update Caption
 - Get Friends' Feed of Sunset Posts
 
-### Friends
-- Send Friend Request
-- Accept Friend Request
-- Reject Friend Request
-- Remove Friend
