@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FeedPage, NotificationsPage, PostPage, SearchPage, UserPage } from './src';
+import { FeedPage, NotificationsPage, PostPage, SearchPage, UserPage } from './src/pages';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
