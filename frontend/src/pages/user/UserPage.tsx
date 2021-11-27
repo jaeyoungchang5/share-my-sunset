@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 
-export function UserPage() {
+import { Profile } from '../../components';
+import { IUser } from '../../interfaces';
+
+export function UserPage(props: any) {
+	const user: IUser = props.route.params.user;
 	return (
-		<View style={styles.container}>
-			<Text>Enjoy your user page!</Text>
-			<StatusBar style="auto" />
-		</View>
+		<Profile user={user} />
 	);
 }
 

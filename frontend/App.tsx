@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FeedPage, NotificationsPage, PostPage, SearchPage, UserPage } from './src/pages';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { FeedPage, NotificationsPage, PostPage, SearchPage, UserPage } from './src/pages';
+import { IUser } from './src/interfaces';
+
 export default function App() {
 	const Tab = createBottomTabNavigator(); 
+
+	const [user, setUser] = useState<IUser>();
+	const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+
+	const testUser = {
+		firstName: 'JaeYoung',
+		lastName: 'Chang',
+		username: 'jchang',
+		bio: 'Sup yo',
+		privacyMode: 0,
+		friends: ['Maureen', 'Jarryn'],
+		friendRequests: [],
+		sunsets: []
+	}
+
+	useEffect(() => {
+		setUser(testUser);
+	}, []);
 
 	return (
 		<SafeAreaProvider>
@@ -20,6 +40,7 @@ export default function App() {
 								return <MaterialIcons name="home-filled" size={size} />
 							})
 						}}
+						initialParams={{user: user}}
 					/>
 					<Tab.Screen 
 						name='Search' 
@@ -29,6 +50,7 @@ export default function App() {
 								return <Ionicons name="search-sharp" size={size} />
 							})
 						}}
+						initialParams={{user: user}}
 					/>
 					<Tab.Screen 
 						name='Post' 
@@ -38,6 +60,7 @@ export default function App() {
 								return <MaterialIcons name="add-circle" size={size} />
 							})
 						}}
+						initialParams={{user: user}}
 					/>
 					<Tab.Screen 
 						name='Notifications' 
@@ -47,6 +70,7 @@ export default function App() {
 								return <Ionicons name="notifications" size={size} />
 							})
 						}}
+						initialParams={{user: user}}
 					/>
 					<Tab.Screen 
 						name='User' 
@@ -56,6 +80,7 @@ export default function App() {
 								return <FontAwesome name="user" size={size} />
 							})
 						}}
+						initialParams={{user: user}}
 					/>
 				</Tab.Navigator>
 			</NavigationContainer>
