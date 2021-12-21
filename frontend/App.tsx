@@ -7,7 +7,6 @@ import { Provider as PaperProvider } from 'react-native-paper';
 
 import { FeedPage, NotificationsPage, PostPage, SearchPage, UserPage } from './src/pages';
 import { IUser } from './src/interfaces';
-import { UserPageNavigation } from './src/navigation';
 
 export default function App() {
 	const Tab = createBottomTabNavigator(); 
@@ -16,6 +15,7 @@ export default function App() {
 	const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
 	const testUser = {
+		_id: '619ee65d296e594128b07458',
 		firstName: 'JaeYoung',
 		lastName: 'Chang',
 		username: 'jchang',
@@ -33,9 +33,6 @@ export default function App() {
 	return (
 		<PaperProvider>
 			<SafeAreaProvider>
-				{/* <NavigationContainer>
-					<UserPageNavigation />
-				</NavigationContainer> */}
 				<NavigationContainer>
 					<Tab.Navigator initialRouteName='Feed'>
 						<Tab.Screen 
