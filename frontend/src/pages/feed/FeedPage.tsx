@@ -9,7 +9,7 @@ export function FeedPage(props: any) {
 	const [feed, setFeed] = useState([]);
 
 	useEffect(() => {
-		// loadFeed();
+		loadFeed();
 	}, []);
 
 	function loadFeed() {

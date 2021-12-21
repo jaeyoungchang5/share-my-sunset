@@ -1,3 +1,3 @@
 declare module '@env' {
-    export const SERVER: string;
+    export const AWS_SERVER: string;
 }
