@@ -1,4 +1,3 @@
-export * from './Profile';
 export * from './UserFriends';
 export * from './UserInfo';
 export * from './UserLikes';
