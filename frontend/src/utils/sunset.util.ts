@@ -1,7 +1,7 @@
-import { AWS_SERVER } from '@env';
+import { CURRENT_SERVER } from './server.util';
 
 export function getSunsetById(sunsetId: string) {
-    return fetch(AWS_SERVER + '/sunset/getSunsetById', {
+    return fetch(CURRENT_SERVER + '/sunset/getSunsetById', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({_id: sunsetId})

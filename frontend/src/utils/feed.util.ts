@@ -1,7 +1,7 @@
-import { AWS_SERVER } from '@env';
+import { CURRENT_SERVER } from './server.util';
 
 export function getFeed(userId: string) {
-    return fetch(AWS_SERVER + '/getFeed', {
+    return fetch(CURRENT_SERVER + '/getFeed', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({userId: userId})
