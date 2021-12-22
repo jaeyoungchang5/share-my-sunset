@@ -9,12 +9,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const UserStack = createNativeStackNavigator();
 const ProfileTab = createMaterialTopTabNavigator();
 
-function UserNav() {
+function UserNav({user}: any) {
+    const userId: string = user._id;
     return (
         <ProfileTab.Navigator
             initialRouteName="Posts"
         >
-            <ProfileTab.Screen name="Posts" component={UserPosts} />
+            <ProfileTab.Screen name="Posts" component={UserPosts} initialParams={{userId: userId}} />
             <ProfileTab.Screen name="Likes" component={UserLikes} />
             <ProfileTab.Screen name="Friends" component={UserFriends} />
         </ProfileTab.Navigator>
@@ -26,7 +27,7 @@ export function UserPage(props: any) {
 	return (
         <>
             <UserInfo initialParams={{user: user}} />
-            <UserNav />
+            <UserNav user={user} />
         </>
 	);
 }

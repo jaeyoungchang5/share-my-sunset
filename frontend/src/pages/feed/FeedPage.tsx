@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { IUser } from '../../interfaces';
-import { getFeed, getSunsetById } from '../../utils';
+import { getFeed } from '../../utils';
 import { Sunset } from '../../components';
 
 interface IFeedItem {
