@@ -1,5 +1,8 @@
+// external imports
 import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, StyleSheet } from 'react-native';
+
+// internal imports
 
 export function UserLikes() {
     return (

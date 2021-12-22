@@ -1,36 +1,22 @@
+// external imports
 import React, { useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { IUser } from '../../interfaces';
+import { FlatList, StyleSheet } from 'react-native';
+
+// internal imports
+import { IFeed } from '../../interfaces';
 import { getFeed } from '../../utils';
 import { Sunset } from '../../components';
 
-interface IFeedItem {
-	_id: string,
-	userId: string,
-	sunsetImage: string,
-	description: string,
-	createdAt: string,
-	updatedAt: string,
-	__v: number
-}
-
-interface IFeed {
-	result: string,
-	message: string,
-	data: IFeedItem[]
-}
-
-export function FeedPage(props: any) {
-	const user: IUser = props.route.params.user;
+export function FeedPage({route, navigation} : any) {
+	const userId: string = route.params.userId;
 	const [feed, setFeed] = useState<IFeed>();
-
+	
 	useEffect(() => {
 		loadFeed();
 	}, []);
 
 	function loadFeed() {
-		getFeed(user._id)
+		getFeed(userId)
 		.then(res => {
 			setFeed(res);
 			return;
@@ -39,7 +25,7 @@ export function FeedPage(props: any) {
 
 	function renderItem({ item } : any) {
 		return (
-			<Sunset sunset={item} />
+			<Sunset sunset={item} navigation={navigation} />
 		);
 	}
 

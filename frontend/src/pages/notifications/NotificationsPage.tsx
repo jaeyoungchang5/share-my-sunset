@@ -1,6 +1,9 @@
+// external imports
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+
+// internal imports
 
 export function NotificationsPage() {
 	return (

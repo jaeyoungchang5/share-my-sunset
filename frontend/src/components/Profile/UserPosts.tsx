@@ -1,23 +1,19 @@
+// external imports
 import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
+
+// internal imports
 import { Sunset } from '../Feed';
 import { getSunsetIdsByUserId } from '../../utils';
+import { IPostIds } from '../../interfaces';
 
-interface IPostIds {
-    result: string,
-    message: string,
-    data: {
-        _id: string
-    }[]
-}
-
-export function UserPosts(props: any) {
-    const userId: string = props.route.params.userId;
+export function UserPosts({route}: any) {
+    const userId: string = route.params.userId;
     const [postIds, setPostIds] = useState<IPostIds>();
 
     useEffect(() => {
         loadPostIds();
-    }, []);
+    }, [userId]);
 
     function loadPostIds() {
         getSunsetIdsByUserId(userId)

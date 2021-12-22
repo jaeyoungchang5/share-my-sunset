@@ -9,3 +9,11 @@ export interface IUser {
     friendRequests: string[],
     sunsets: string[],
 }
+
+export interface IPostIds {
+    result: string,
+    message: string,
+    data: {
+        _id: string
+    }[]
+}

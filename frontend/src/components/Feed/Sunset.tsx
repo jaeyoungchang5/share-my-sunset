@@ -1,18 +1,13 @@
+// external imports
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { getSunsetById } from '../../utils';
 
-interface ISunset {
-    result: string,
-    message: string,
-    data: {
-        userId: string,
-        description: string,
-        sunsetImage: string
-    }
-}
+// internal imports
+import { getSunsetById } from '../../utils';
+import { ISunset } from '../../interfaces';
 
 export function Sunset(props: any) {
+    const sunsetId: string = props.sunset._id;
     const [sunset, setSunset] = useState<ISunset>();
 
     useEffect(() => {
@@ -20,7 +15,7 @@ export function Sunset(props: any) {
     }, []);
 
     function loadSunset() {
-        getSunsetById(props.sunset._id)
+        getSunsetById(sunsetId)
         .then(res => {
             setSunset(res);
             return;
@@ -32,7 +27,7 @@ export function Sunset(props: any) {
             <Image style={styles.cardImage} source={{uri: sunset?.data.sunsetImage}}/>
             <View style={styles.cardHeader}>
                 <TouchableOpacity
-                    // onPress={() => props.navigation.navigate('Profile')}
+                    onPress={() => props.navigation.navigate('User', {userId: sunset?.data.userId})}
                 >
                     <Text style={styles.cardTitle}>{sunset?.data.userId}</Text>
                 </TouchableOpacity>
@@ -48,7 +43,6 @@ const styles = StyleSheet.create({
     card: {
         marginBottom: 25,
         justifyContent: 'center'
-
     },
     cardImage: {
         width: '100%',

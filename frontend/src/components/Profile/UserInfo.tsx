@@ -1,18 +1,34 @@
+// external imports
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
+// internal imports
 import { IUser } from '../../interfaces';
+import { getUserInfo } from '../../utils';
 
-export function UserInfo(props: any) {
-	const user: IUser = props.initialParams.user;
+export function UserInfo({userId}: any) {
+    const [user, setUser] = useState<IUser>();
+
+    useEffect(() => {
+        loadUserInfo();
+    }, [userId]);
+
+    function loadUserInfo() {
+        getUserInfo(userId)
+        .then(res => {
+            setUser(res.data);
+            return;
+        })
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.userRow}>
                 <View style={styles.userNameRow}>
-                    <Text style={styles.userNameText}>{user.firstName} {user.lastName}</Text>
+                    <Text style={styles.userNameText}>{user?.firstName} {user?.lastName}</Text>
                 </View>
                 <View style={styles.userBioRow}>
-                    <Text style={styles.userBioText}>{user.bio}</Text>
+                    <Text style={styles.userBioText}>{user?.bio}</Text>
                 </View>
             </View>
         </View>
