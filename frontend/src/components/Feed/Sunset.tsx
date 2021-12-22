@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { getSunsetById } from '../../utils';
 
 interface ISunset {
@@ -28,10 +28,47 @@ export function Sunset(props: any) {
     }
 
     return (
-        <View>
-            <Image style={{width: 100, height: 50, borderWidth: 1}} source={{uri: sunset?.data.sunsetImage}}/>
-            <Text>{sunset?.data.description}</Text>
-            <Text>{sunset?.data.userId}</Text>
+        <View style={styles.card}>
+            <Image style={styles.cardImage} source={{uri: sunset?.data.sunsetImage}}/>
+            <View style={styles.cardHeader}>
+                <TouchableOpacity
+                    // onPress={() => props.navigation.navigate('Profile')}
+                >
+                    <Text style={styles.cardTitle}>{sunset?.data.userId}</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.cardContent}>
+                <Text>{sunset?.data.description}</Text>
+            </View>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    card: {
+        marginBottom: 25,
+        justifyContent: 'center'
+
+    },
+    cardImage: {
+        width: '100%',
+        height: 300
+    },
+    cardHeader: {
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    cardTitle: {
+        // color: theme['color-basic-1000']
+    },
+    cardAvatar: {
+        marginRight: 16
+    },
+    cardContent: {
+        padding: 10,
+        borderWidth: 0.25,
+        borderColor: 'grey'
+    }
+});
