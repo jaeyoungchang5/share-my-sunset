@@ -1,6 +1,6 @@
 // external imports
 import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
 
 // internal imports
 import { UserInfo } from '../../components';
@@ -10,11 +10,11 @@ export function UserPage({route}: any) {
     const userId: string = route.params.userId;
     useEffect(() => {
 
-    }, [userId]);
+    }, []);
     
 	return (
         <>
-            <UserInfo userId={userId} />
+            <UserInfo userId={userId}  />
             <UserNav userId={userId} />
         </>
 	);
@@ -23,7 +23,9 @@ export function UserPage({route}: any) {
 const styles = StyleSheet.create({
     scroll: {
         backgroundColor: '#FFF',
-        flex: 1,
-        overflow: 'hidden'
+        flex: 1
+    },
+    wrapBox: {
+        justifyContent: 'flex-start'
     }
 });

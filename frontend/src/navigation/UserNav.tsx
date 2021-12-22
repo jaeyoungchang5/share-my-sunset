@@ -10,7 +10,7 @@ export function UserNav({userId}: any) {
 
     useEffect(() => {
 
-    }, [userId]);
+    }, []);
 
     return (
         <ProfileTab.Navigator initialRouteName="Posts">

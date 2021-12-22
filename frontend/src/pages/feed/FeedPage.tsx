@@ -7,6 +7,7 @@ import { IFeed } from '../../interfaces';
 import { getFeed } from '../../utils';
 import { Sunset } from '../../components';
 
+
 export function FeedPage({route, navigation} : any) {
 	const userId: string = route.params.userId;
 	const [feed, setFeed] = useState<IFeed>();
@@ -25,7 +26,7 @@ export function FeedPage({route, navigation} : any) {
 
 	function renderItem({ item } : any) {
 		return (
-			<Sunset sunset={item} navigation={navigation} />
+			<Sunset sunsetId={item._id} navigation={navigation} />
 		);
 	}
 

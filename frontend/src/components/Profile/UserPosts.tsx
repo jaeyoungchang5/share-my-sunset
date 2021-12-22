@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
 
 // internal imports
-import { Sunset } from '../Feed';
+import { Sunset } from '../Post';
 import { getSunsetIdsByUserId } from '../../utils';
 import { IPostIds } from '../../interfaces';
 
@@ -25,10 +25,9 @@ export function UserPosts({route}: any) {
 
     function renderItem({ item } : any) {
 		return (
-			<Sunset sunset={item} />
+			<Sunset sunsetId={item._id} userId={userId} />
 		);
 	}
-
     return (
         <FlatList style={styles.scroll}
 			data={postIds?.data}
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
     },
 	scroll: {
         backgroundColor: '#FFF',
-        flex: 1,
+        flex: 5,
         overflow: 'hidden'
     }
 });

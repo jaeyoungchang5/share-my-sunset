@@ -6,16 +6,33 @@ import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 // internal imports
 import { FeedPage, NotificationsPage, PostPage, SearchPage, UserPage } from '../pages';
+import { getUserInfo } from '../utils';
+import { IUser } from '../interfaces';
+import { FeedNav } from './FeedNav';
 
 export function AppNav({userId}: any) {
 	const Tab = createBottomTabNavigator(); 
+
+    const [user, setUser] = useState<IUser>();
+
+    useEffect(() => {
+        loadUserInfo();
+    }, []);
+
+    function loadUserInfo() {
+        getUserInfo(userId)
+        .then(res => {
+            setUser(res.data);
+            return;
+        })
+    }
     
     return (
         <NavigationContainer>
             <Tab.Navigator initialRouteName='Feed'>
                 <Tab.Screen 
                     name='Feed' 
-                    component={FeedPage}
+                    component={FeedNav}
                     options={{
                         tabBarIcon: (({focused, color, size}) => {
                             return <MaterialIcons name="home-filled" size={size} />
@@ -59,7 +76,8 @@ export function AppNav({userId}: any) {
                     options={{
                         tabBarIcon: (({focused, color, size}) => {
                             return <FontAwesome name="user" size={size} />
-                        })
+                        }),
+                        // title: user?.username
                     }}
                     initialParams={{userId: userId}}
                 />

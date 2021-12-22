@@ -6,8 +6,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { getSunsetById } from '../../utils';
 import { ISunset } from '../../interfaces';
 
-export function Sunset(props: any) {
-    const sunsetId: string = props.sunset._id;
+export function Sunset({sunsetId, navigation}: any) {
     const [sunset, setSunset] = useState<ISunset>();
 
     useEffect(() => {
@@ -27,9 +26,9 @@ export function Sunset(props: any) {
             <Image style={styles.cardImage} source={{uri: sunset?.data.sunsetImage}}/>
             <View style={styles.cardHeader}>
                 <TouchableOpacity
-                    onPress={() => props.navigation.navigate('User', {userId: sunset?.data.userId})}
+                    onPress={() => navigation.navigate('User Page', {userId: sunset?.data.userId})}
                 >
-                    <Text style={styles.cardTitle}>{sunset?.data.userId}</Text>
+                    <Text style={styles.cardTitle}>@{sunset?.data.userId}</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.cardContent}>
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     cardTitle: {
-        // color: theme['color-basic-1000']
+        fontWeight: 'bold',
     },
     cardAvatar: {
         marginRight: 16

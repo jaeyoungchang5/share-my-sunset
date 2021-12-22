@@ -8,7 +8,7 @@ import { getUserInfo } from '../../utils';
 
 export function UserInfo({userId}: any) {
     const [user, setUser] = useState<IUser>();
-
+    
     useEffect(() => {
         loadUserInfo();
     }, [userId]);
@@ -26,6 +26,7 @@ export function UserInfo({userId}: any) {
             <View style={styles.userRow}>
                 <View style={styles.userNameRow}>
                     <Text style={styles.userNameText}>{user?.firstName} {user?.lastName}</Text>
+                    <Text style={styles.usernameText}>@{user?.username}</Text>
                 </View>
                 <View style={styles.userBioRow}>
                     <Text style={styles.userBioText}>{user?.bio}</Text>
@@ -36,17 +37,12 @@ export function UserInfo({userId}: any) {
 }
 
 const styles = StyleSheet.create({
-    scroll: {
-        backgroundColor: '#FFF',
-        flex: 1,
-        overflow: 'hidden'
-    },
 	container: {
         alignItems: 'center',
         backgroundColor: '#FFF',
-        flex: 1,
-        marginBottom: 10,
-        marginTop: 10,
+        paddingBottom: 10,
+        paddingTop: 10,
+        height: '20%',
     },
     userRow: {
         alignItems: 'center',
@@ -61,6 +57,12 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 18,
         textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    usernameText: {
+        color: '#000',
+        textAlign: 'center',
+        fontStyle: 'italic',
     },
     userBioRow: {
         marginLeft: 40,
