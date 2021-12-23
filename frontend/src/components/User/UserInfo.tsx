@@ -4,7 +4,7 @@ import { Text, View, StyleSheet } from 'react-native';
 
 // internal imports
 import { IUser } from '../../interfaces';
-import { getUserInfo } from '../../utils';
+import { getUserInfo } from '../../middleware';
 
 export function UserInfo({userId}: any) {
     const [user, setUser] = useState<IUser>();

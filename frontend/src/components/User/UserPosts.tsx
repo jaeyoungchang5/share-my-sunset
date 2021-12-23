@@ -4,7 +4,7 @@ import { Text, View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
 
 // internal imports
 import { Post } from '../Post';
-import { getSunsetIdsByUserId } from '../../utils';
+import { getSunsetIdsByUserId } from '../../middleware';
 import { IPostIds } from '../../interfaces';
 
 export function UserPosts({route, navigation}: any) {

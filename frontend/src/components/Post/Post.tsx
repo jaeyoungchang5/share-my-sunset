@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // internal imports
-import { getSunsetById } from '../../utils';
+import { getSunsetById } from '../../middleware';
 import { ISunset } from '../../interfaces';
 
 export function Post({sunsetId, navigation}: any) {
@@ -38,7 +38,7 @@ export function Post({sunsetId, navigation}: any) {
             <Image style={styles.cardImage} source={{uri: sunset?.data.sunsetImage}}/>
             <View style={styles.cardHeader}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('User Page', {userId: sunset?.data.userId})}
+                    onPress={() => navigation.navigate('Profile Page', {userId: sunset?.data.userId})}
                 >
                     <Text style={styles.cardTitle}>@{sunset?.data.userId}</Text>
                 </TouchableOpacity>

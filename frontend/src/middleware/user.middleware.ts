@@ -1,4 +1,4 @@
-import { CURRENT_SERVER } from './server.util';
+import { CURRENT_SERVER } from './server.middleware';
 
 export function getUserInfo(userId: string) {
     return fetch(CURRENT_SERVER + '/user/getInfo', {

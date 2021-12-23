@@ -13,8 +13,22 @@ export function FeedNav({route} : any) {
     
     return (
         <Stack.Navigator>
-            <Stack.Screen name='Home Page' component={FeedPage} initialParams={{userId: userId}} />
-            <Stack.Screen name='User Page' component={ProfilePage} initialParams={{userId: userId}} />
+            <Stack.Screen 
+                name='Home Page' 
+                component={FeedPage} 
+                initialParams={{userId: userId}} 
+                options={{headerShown: false}} 
+            />
+            <Stack.Screen 
+                name='Profile Page' 
+                component={ProfilePage} 
+                initialParams={{userId: userId}} 
+                options={{
+                    headerTitle: '', 
+                    headerTransparent: true,
+                    headerBackTitleVisible: false
+                }} 
+            />
         </Stack.Navigator>
     )
 }

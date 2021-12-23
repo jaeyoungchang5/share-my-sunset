@@ -1,4 +1,4 @@
-import { CURRENT_SERVER } from './server.util';
+import { CURRENT_SERVER } from './server.middleware';
 
 export function getSunsetById(sunsetId: string) {
     return fetch(CURRENT_SERVER + '/sunset/getSunsetById', {

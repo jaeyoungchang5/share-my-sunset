@@ -4,7 +4,7 @@ import { FlatList, StyleSheet } from 'react-native';
 
 // internal imports
 import { IFeed } from '../../interfaces';
-import { getFeed } from '../../utils';
+import { getFeed } from '../../middleware';
 import { Post } from '../../components';
 
 
