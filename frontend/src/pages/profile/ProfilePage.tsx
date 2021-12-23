@@ -6,16 +6,13 @@ import { ScrollView, View, StyleSheet } from 'react-native';
 import { UserInfo } from '../../components';
 import { UserNav } from '../../navigation/UserNav';
 
-export function UserPage({route}: any) {
+export function ProfilePage({route, navigation}: any) {
     const userId: string = route.params.userId;
-    useEffect(() => {
-
-    }, []);
     
 	return (
         <>
             <UserInfo userId={userId}  />
-            <UserNav userId={userId} />
+            <UserNav userId={userId} navigation={navigation} />
         </>
 	);
 }

@@ -3,29 +3,35 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
 
 // internal imports
-import { Sunset } from '../Post';
+import { Post } from '../Post';
 import { getSunsetIdsByUserId } from '../../utils';
 import { IPostIds } from '../../interfaces';
 
-export function UserPosts({route}: any) {
+export function UserPosts({route, navigation}: any) {
     const userId: string = route.params.userId;
     const [postIds, setPostIds] = useState<IPostIds>();
 
     useEffect(() => {
-        loadPostIds();
-    }, [userId]);
+        let mounted = true;
+		loadPostIds(mounted);
 
-    function loadPostIds() {
+		return function cleanup() {
+			mounted = false;
+		}
+    }, []);
+
+    function loadPostIds(mounted: boolean) {
         getSunsetIdsByUserId(userId)
         .then(res => {
-            setPostIds(res);
-            return;
+            if (mounted) {
+                setPostIds(res);
+            }
         })
     }
 
     function renderItem({ item } : any) {
 		return (
-			<Sunset sunsetId={item._id} userId={userId} />
+			<Post sunsetId={item._id} userId={userId} navigation={navigation} />
 		);
 	}
     return (

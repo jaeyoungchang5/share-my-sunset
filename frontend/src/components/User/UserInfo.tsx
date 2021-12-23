@@ -10,14 +10,20 @@ export function UserInfo({userId}: any) {
     const [user, setUser] = useState<IUser>();
     
     useEffect(() => {
-        loadUserInfo();
-    }, [userId]);
+        let mounted = true;
+		loadUserInfo(mounted);
 
-    function loadUserInfo() {
+		return function cleanup() {
+			mounted = false;
+		}
+    }, []);
+
+    function loadUserInfo(mounted: boolean) {
         getUserInfo(userId)
         .then(res => {
-            setUser(res.data);
-            return;
+            if (mounted) {
+                setUser(res.data);
+            }
         })
     }
 

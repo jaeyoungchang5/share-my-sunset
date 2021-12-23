@@ -1,5 +1,5 @@
 export * from './feed';
 export * from './notifications';
-export * from './post';
+export * from './upload';
 export * from './search';
-export * from './user';
+export * from './profile';

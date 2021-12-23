@@ -5,7 +5,7 @@ import { FlatList, StyleSheet } from 'react-native';
 // internal imports
 import { IFeed } from '../../interfaces';
 import { getFeed } from '../../utils';
-import { Sunset } from '../../components';
+import { Post } from '../../components';
 
 
 export function FeedPage({route, navigation} : any) {
@@ -13,20 +13,26 @@ export function FeedPage({route, navigation} : any) {
 	const [feed, setFeed] = useState<IFeed>();
 	
 	useEffect(() => {
-		loadFeed();
+		let mounted = true;
+		loadFeed(mounted);
+
+		return function cleanup() {
+			mounted = false;
+		}
 	}, []);
 
-	function loadFeed() {
+	function loadFeed(mounted: boolean) {
 		getFeed(userId)
 		.then(res => {
-			setFeed(res);
-			return;
+			if (mounted) {
+				setFeed(res);
+			}
 		})
 	}
 
 	function renderItem({ item } : any) {
 		return (
-			<Sunset sunsetId={item._id} navigation={navigation} />
+			<Post sunsetId={item._id} navigation={navigation} />
 		);
 	}
 

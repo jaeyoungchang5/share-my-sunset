@@ -8,10 +8,6 @@ export default function App() {
 	const [userId, setUserId] = useState<string>('619ee65d296e594128b07458');
 	const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
-	useEffect(() => {
-		// setUser(testUser);
-	}, []);
-
 	return (
 		<PaperProvider>
 			<SafeAreaProvider>

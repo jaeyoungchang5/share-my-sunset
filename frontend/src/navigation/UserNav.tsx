@@ -8,10 +8,6 @@ import { UserLikes, UserFriends, UserPosts } from '../components';
 export function UserNav({userId}: any) {
     const ProfileTab = createMaterialTopTabNavigator();
 
-    useEffect(() => {
-
-    }, []);
-
     return (
         <ProfileTab.Navigator initialRouteName="Posts">
             <ProfileTab.Screen name="Posts" component={UserPosts} initialParams={{userId: userId}} />

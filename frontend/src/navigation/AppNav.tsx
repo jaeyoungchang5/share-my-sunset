@@ -5,27 +5,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 // internal imports
-import { FeedPage, NotificationsPage, PostPage, SearchPage, UserPage } from '../pages';
-import { getUserInfo } from '../utils';
-import { IUser } from '../interfaces';
+import { NotificationsPage, UploadPage, SearchPage, ProfilePage } from '../pages';
 import { FeedNav } from './FeedNav';
+import { ProfileNav } from './ProfileNav';
 
 export function AppNav({userId}: any) {
 	const Tab = createBottomTabNavigator(); 
-
-    const [user, setUser] = useState<IUser>();
-
-    useEffect(() => {
-        loadUserInfo();
-    }, []);
-
-    function loadUserInfo() {
-        getUserInfo(userId)
-        .then(res => {
-            setUser(res.data);
-            return;
-        })
-    }
     
     return (
         <NavigationContainer>
@@ -51,8 +36,8 @@ export function AppNav({userId}: any) {
                     initialParams={{userId: userId}}
                 />
                 <Tab.Screen 
-                    name='Post' 
-                    component={PostPage}
+                    name='Upload' 
+                    component={UploadPage}
                     options={{
                         tabBarIcon: (({focused, color, size}) => {
                             return <MaterialIcons name="add-circle" size={size} />
@@ -71,13 +56,12 @@ export function AppNav({userId}: any) {
                     initialParams={{userId: userId}}
                 />
                 <Tab.Screen 
-                    name='User' 
-                    component={UserPage}
+                    name='Profile' 
+                    component={ProfileNav}
                     options={{
                         tabBarIcon: (({focused, color, size}) => {
                             return <FontAwesome name="user" size={size} />
                         }),
-                        // title: user?.username
                     }}
                     initialParams={{userId: userId}}
                 />
