@@ -109,8 +109,11 @@ export function getSunsetById(req: Request, res: Response) {
                     fileData.push(chunks[i].data.toString('base64'));
                 }
                 const finalData = {
+                    sunsetId: sunset._id,
                     userId: sunset.userId,
                     description: sunset.description,
+                    createdAt: sunset.createdAt,
+                    updatedAt: sunset.updatedAt,
                     sunsetImage: `data:${doc.contentType};base64,${fileData.join('')}`
                 }
                 debuglog('LOG', 'sunset controller - get sunset by id', 'found sunset post');

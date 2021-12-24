@@ -4,12 +4,15 @@
  */
 
 /* import dependencies */
-import mongoose, { Document, Schema, Model, model } from 'mongoose';
+import mongoose, { Document, Schema, Model, model, Date } from 'mongoose';
 
 interface ISunset {
+    sunsetId: mongoose.Types.ObjectId,
     userId: mongoose.Types.ObjectId,
     sunsetImage: string,
-    description: string
+    description: string,
+    createdAt: Date,
+    updatedAt: Date,
 }
 
 interface ISunsetModel extends ISunset, Document { }
