@@ -4,6 +4,8 @@ export interface ISunset {
     data: {
         userId: string,
         description: string,
-        sunsetImage: string
+        sunsetImage: string,
+        createdAt: Date,
+        updatedAt: Date,
     }
 }
