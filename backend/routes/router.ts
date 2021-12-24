@@ -27,6 +27,7 @@ router.get('/test', (req: Request, res: Response): void => {
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
 router.post('/user/getInfo', userCtrl.getUserInfo);
+router.post('/user/getUserUsername', userCtrl.getUserUsername);
 router.post('/user/updateInfo', userCtrl.updateUserInfo);
 router.post('/user/updatePassword', userCtrl.updateUserPassword);
 router.post('/user/deleteUser', userCtrl.deleteUser);
@@ -40,6 +41,7 @@ router.post('/sunset/deleteSunset', sunsetCtrl.deleteSunset);
 router.post('/sunset/updateSunsetCaption', sunsetCtrl.updateSunsetCaption);
 
 // friends
+router.post('/friend/getUsersFriends', friendCtrl.getUsersFriends);
 router.post('/friend/sendFriendRequest', friendCtrl.sendFriendRequest);
 router.post('/friend/acceptFriendRequest', friendCtrl.acceptFriendRequest);
 router.post('/friend/rejectFriendRequest', friendCtrl.rejectFriendRequest);

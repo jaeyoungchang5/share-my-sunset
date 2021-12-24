@@ -140,7 +140,7 @@ export function getSunsetIdsByUserId(req: Request, res: Response) {
         userId: new mongoose.Types.ObjectId(req.body.userId)
     };
 
-    Sunset.find({userId: body.userId}).select('_id')
+    Sunset.find({userId: body.userId}).select('_id').sort({createdAt: 'descending'})
     .then(sunsetIds => {
         if (!sunsetIds) {
             debuglog('LOG', 'sunset controller - get sunset by user id', 'User has no posts');

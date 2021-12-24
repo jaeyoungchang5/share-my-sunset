@@ -2,6 +2,7 @@
  * @fileoverview friend.controller.ts
  * This file contains all the controller functions for the friend collection.
  * Functions: 
+    ** getUsersFriends
     ** sendFriendRequest
     ** acceptFriendRequest
     ** rejectFriendRequest
@@ -13,6 +14,36 @@ import { debuglog } from '../helpers';
 import { User, IUserModel, FriendRequest } from '../models';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+
+/**
+ * @description Gets user's friends by userId
+ * @param {ObjectId} req.body.userId Requester
+ */
+export function getUsersFriends(req: Request, res: Response): void {
+    if (!req.body.userId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        userId: new mongoose.Types.ObjectId(req.body.userId)
+    }
+
+    User.findOne({_id: body.userId, isDeleted: false}).select('friends')
+    .then(userData => {
+        if (userData){
+            debuglog('LOG', 'friend controller - getUsersFriends', 'got user friends');
+            res.status(200).json({result: 'success', data: userData});
+        } else {
+            debuglog('ERROR', 'friend controller - getUsersFriends', 'user not found');
+            res.status(404).json({result: 'error', message: 'User not found.'});
+        }
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'friend controller - getUsersFriends', err);
+        res.status(400).json(err);
+        return;
+    })
+}
 
 /**
  * @description Requester sends friend request to Recipient
