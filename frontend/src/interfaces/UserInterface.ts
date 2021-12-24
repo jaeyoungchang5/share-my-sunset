@@ -17,3 +17,12 @@ export interface IPostIds {
         _id: string
     }[]
 }
+
+export interface IFriends {
+    result: string,
+    message: string,
+    data: {
+        _id: string,
+        friends: string[]
+    }
+}

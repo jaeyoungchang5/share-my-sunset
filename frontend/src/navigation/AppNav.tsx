@@ -61,7 +61,7 @@ export function AppNav({userId}: any) {
                     options={{
                         tabBarIcon: (({focused, color, size}) => {
                             return <FontAwesome name="user" size={size} />
-                        }),
+                        })
                     }}
                     initialParams={{userId: userId}}
                 />

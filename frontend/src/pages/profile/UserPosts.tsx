@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
 
 // internal imports
-import { Post } from '../Post';
+import { Post } from '../../components/Post';
 import { getSunsetIdsByUserId } from '../../middleware';
 import { IPostIds } from '../../interfaces';
 

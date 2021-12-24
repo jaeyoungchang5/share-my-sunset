@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 
 // internal imports
-import { UserInfo } from '../../components';
+import { UserInfo } from './UserInfo';
 import { UserNav } from '../../navigation/UserNav';
 
 export function ProfilePage({route, navigation}: any) {
