@@ -1,4 +1,47 @@
 import { CURRENT_SERVER } from './server.middleware';
+import { createToken } from '../utils';
+
+interface ILoginCredentials {
+    username: string,
+    password: string,
+}
+
+interface ISignupCredentials {
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string,
+}
+
+export function login(loginCredentials: ILoginCredentials){
+    return fetch(CURRENT_SERVER + '/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(loginCredentials)
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Bad credentials!');
+    })
+    .then(({token}) => {
+        createToken(token);
+    });
+}
+
+export function signup(signupCredentials: ISignupCredentials) {
+    return fetch(CURRENT_SERVER + '/signup', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(signupCredentials)
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Username has already been taken');
+    })
+    .then(({token}) => {
+        createToken(token);
+    })
+}
 
 export function getUserInfo(userId: string) {
     return fetch(CURRENT_SERVER + '/user/getInfo', {
