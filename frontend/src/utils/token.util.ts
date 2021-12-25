@@ -4,11 +4,10 @@ import { Base64 } from 'js-base64';
 export function getUser(){
     return getToken()
     .then(token => {
-        console.log('userutil :: getUser :: got raw token :: ' + token)
+        console.log('token util :: getUser :: got raw token :: ' + token)
         try {
             if (token) {
                 const user = JSON.parse(Base64.atob(token.split('.')[1]))['user'];
-                console.log(`userutil :: getUser :: got token for ${user['netID']}`);
                 return user;
             }
         } catch (e) {
@@ -21,27 +20,27 @@ export function getUser(){
 }
 
 export function createToken(token: any){
-    console.log('userutil :: createToken :: creating token ' + token);
+    console.log('token util :: createToken :: creating token ' + token);
     if (token) {
-        console.log('userutil :: createToken :: attempting');
+        console.log('token util :: createToken :: attempting');
         AsyncStorage.setItem('token', token)
         .then(() => {
             AsyncStorage.getItem('token')
             .then((result) => {
-                console.log('userutil :: createToken :: successfully created token ' + result);
+                console.log('token util :: createToken :: successfully created token ' + result);
             })
         })
     } else {
-        console.log('userutil :: createToken :: no token passed');
+        console.log('token util :: createToken :: no token passed');
         AsyncStorage.removeItem('token');
     }
 }
 
 async function getToken(){
-    console.log('userutil :: getToken :: start')
+    console.log('token util :: getToken :: start')
     try {
         const tok = await AsyncStorage.getItem('token');
-        console.log('userutil :: getToken :: got following token - ' + tok);
+        console.log('token util :: getToken :: got following token - ' + tok);
         return tok;
     } catch(e) {
         // error reading value

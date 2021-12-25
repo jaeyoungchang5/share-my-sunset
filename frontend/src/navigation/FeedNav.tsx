@@ -3,13 +3,11 @@ import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FeedPage, ProfilePage } from "../pages";
 
-
 // internal imports
-
-const Stack = createNativeStackNavigator();
 
 export function FeedNav({route} : any) {
 	const userId: string = route.params.userId;
+    const Stack = createNativeStackNavigator();
     
     return (
         <Stack.Navigator>

@@ -11,7 +11,7 @@ export function ProfilePage({route, navigation}: any) {
     
 	return (
         <>
-            <UserInfo userId={userId}  />
+            <UserInfo userId={userId} route={route} navigation={navigation} />
             <UserNav userId={userId} navigation={navigation} />
         </>
 	);

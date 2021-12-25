@@ -1,17 +1,8 @@
+// internal imports
 import { CURRENT_SERVER } from './server.middleware';
 import { createToken } from '../utils';
+import { ISignupCredentials, ILoginCredentials } from '../interfaces';
 
-interface ILoginCredentials {
-    username: string,
-    password: string,
-}
-
-interface ISignupCredentials {
-    firstName: string,
-    lastName: string,
-    username: string,
-    password: string,
-}
 
 export function login(loginCredentials: ILoginCredentials){
     return fetch(CURRENT_SERVER + '/login', {

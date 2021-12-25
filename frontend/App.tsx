@@ -1,43 +1,55 @@
+// external imports
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
 
+// internal imports
 import { AppNav, AuthNav } from './src/navigation';
 import { getUser } from './src/utils';
 
 export default function App() {
-	const [userId, setUserId] = useState<string>('619ee65d296e594128b07458');
-	const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+	const [userId, setUserId] = useState<string>('');
 
-	async function loadUser() {
-		const res = await getUser();
-		if (res) {
-			setLoggedIn(true);
-			console.log(res);
-		}
-		return res;
-	}
+	const Stack = createNativeStackNavigator();
 
-	function handleLogin(){
-		loadUser();
-	}
+	// async function loadUser() {
+	// 	const res = await getUser();
+	// 	if (res) {
+	// 		console.log('loadUser');
+	// 		console.log(res);
+	// 		setUserId(res.userId);
+	// 	}
+	// 	return res;
+	// }
 
-	function handleLogout(){
-		setLoggedIn(false);
-	}
-
-	useEffect(() => {
-		loadUser();
-	}, [isLoggedIn]);
+	// useEffect(() => {
+	// 	loadUser();
+	// }, []);
 
 	return (
 		<PaperProvider>
 			<SafeAreaProvider>
-				{isLoggedIn ? (
-					<AppNav userId={userId} />
-				): (
-					<AuthNav />
-				)}
+				<NavigationContainer>
+					<Stack.Navigator initialRouteName='Auth'>
+						<Stack.Screen 
+							name='Auth'
+							component={AuthNav}
+							options={{
+								headerShown: false
+							}}
+						/>
+						<Stack.Screen 
+							name='App'
+							component={AppNav}
+							initialParams={{userId: userId}}
+							options={{
+								headerShown: false
+							}}
+						/>
+					</Stack.Navigator>
+				</NavigationContainer>
 			</SafeAreaProvider>
 		</PaperProvider>
 	);

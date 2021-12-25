@@ -3,10 +3,30 @@ import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, StatusBar, TextInput, TouchableOpacity } from 'react-native'
 
 // internal imports
+import { login } from '../../middleware';
+import { getUser } from '../../utils';
+import { ILoginCredentials } from '../../interfaces';
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 
-export function LoginPage({navigation}: any) {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+export function LoginPage({route, navigation}: any) {
+    const [loginUser, setLoginUser] = useState<ILoginCredentials>({
+        username: '',
+        password: ''
+    });
+
+    function handleLoginButton(event: any) {
+        event.preventDefault();
+        login(loginUser)
+        .then(() => {
+            getUser()
+            .then((res) => {
+                navigation.navigate('App', {userId: res.body.userId});
+            })
+        }).catch(err => {
+            // notify user of bad credentials
+        })
+    }
+
     return (
         <View style={styles.container}>
             {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
@@ -16,7 +36,7 @@ export function LoginPage({navigation}: any) {
                     style={styles.TextInput}
                     placeholder="Username"
                     placeholderTextColor="#003f5c"
-                    onChangeText={(username) => setUsername(username)}
+                    onChangeText={(username) => setLoginUser(prev => {return {...prev, 'username': username}})}
                 />
             </View>
 
@@ -26,11 +46,11 @@ export function LoginPage({navigation}: any) {
                     placeholder="Password"
                     placeholderTextColor="#003f5c"
                     secureTextEntry={true}
-                    onChangeText={(password) => setPassword(password)}
+                    onChangeText={(password) => setLoginUser(prev => {return {...prev, 'password': password}})}
                 />
             </View>
 
-            <TouchableOpacity style={styles.loginBtn}>
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLoginButton}>
                 <Text style={styles.loginText}>Log In</Text>
             </TouchableOpacity>
 

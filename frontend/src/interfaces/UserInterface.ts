@@ -26,3 +26,15 @@ export interface IFriends {
         friends: string[]
     }
 }
+
+export interface ILoginCredentials {
+    username: string,
+    password: string,
+}
+
+export interface ISignupCredentials {
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string,
+}

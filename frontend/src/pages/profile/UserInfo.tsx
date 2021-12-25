@@ -1,13 +1,15 @@
 // external imports
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 // internal imports
 import { IUser } from '../../interfaces';
 import { getUserInfo } from '../../middleware';
 
-export function UserInfo({userId}: any) {
+export function UserInfo({route, navigation, userId}: any) {
     const [user, setUser] = useState<IUser>();
+    const navigationPage: string = route.name;
     
     useEffect(() => {
         let mounted = true;
@@ -29,6 +31,15 @@ export function UserInfo({userId}: any) {
 
     return (
         <View style={styles.container}>
+            {
+                (navigationPage == 'Main Profile Page')
+                ? 
+                <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Settings', {userId: userId})}>
+                    <Ionicons name="ios-settings" size={28} color="black" />
+                </TouchableOpacity>
+                :
+                <></>
+            }
             <View style={styles.userRow}>
                 <View style={styles.userNameRow}>
                     <Text style={styles.userNameText}>{user?.firstName} {user?.lastName}</Text>
@@ -55,6 +66,12 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         marginBottom: 12,
+    },
+    settingsButton: {
+        alignSelf: 'flex-end',
+        marginTop: 10,
+        paddingRight: 10,
+        position: 'absolute'
     },
     userNameRow: {
         marginBottom: 10,

@@ -1,14 +1,13 @@
 // external imports
 import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ProfilePage } from "../pages";
+import { ProfilePage, SettingsPage } from "../pages";
 
 // internal imports
 
-const Stack = createNativeStackNavigator();
-
 export function ProfileNav({route} : any) {
 	const userId: string = route.params.userId;
+    const Stack = createNativeStackNavigator();
     
     return (
         <Stack.Navigator initialRouteName="Main Profile Page">
@@ -26,6 +25,16 @@ export function ProfileNav({route} : any) {
                 initialParams={{userId: userId}} 
                 options={{
                     headerTitle: '', 
+                    headerTransparent: true,
+                    headerBackTitleVisible: false
+                }} 
+            />
+            <Stack.Screen 
+                name='Settings'
+                component={SettingsPage}
+                initialParams={{userId: userId}}
+                options={{
+                    headerTitle: 'Settings', 
                     headerTransparent: true,
                     headerBackTitleVisible: false
                 }} 
