@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // internal imports
-import { getSunsetById } from '../../middleware';
+import { getSunsetById, getUserUsername } from '../../middleware';
 import { ISunset } from '../../interfaces';
 import { UserTag } from '../User';
 
 export function Post({sunsetId, navigation}: any) {
     const [sunset, setSunset] = useState<ISunset>();
     const [timeElapsed, setTimeElapsed] = useState<string>();
+    const [username, setUsername] = useState<string>();
 
     useEffect(() => {
         let mounted: boolean = true;
@@ -20,7 +21,15 @@ export function Post({sunsetId, navigation}: any) {
                 setTimeElapsed(calculateTimeElapsed(res.data.createdAt));
                 setSunset(res);
             }
+
+            getUserUsername(res.data.userId)
+            .then(res => {
+                if (mounted) {
+                    setUsername(res.data.username);
+                }
+            })
         })
+
 
 		return function cleanup() {
 			mounted = false;
@@ -47,8 +56,8 @@ export function Post({sunsetId, navigation}: any) {
         <View style={styles.post}>
             <Image style={styles.postImage} source={{uri: sunset?.data.sunsetImage}}/>
             <View style={styles.postContent}>
-                <UserTag userId={sunset?.data.userId} navigation={navigation} />
-                <Text>{sunset?.data.description}</Text>
+                <UserTag userId={sunset?.data.userId} username={username} navigation={navigation} />
+                <Text style={styles.caption}>{sunset?.data.description}</Text>
                 <Text style={styles.date}>{timeElapsed}</Text>
             </View>
         </View>
@@ -70,12 +79,15 @@ const styles = StyleSheet.create({
         height: 300
     },
     postContent: {
-        paddingBottom: 10,
+        paddingBottom: 10
+    },
+    caption: {
         paddingLeft: 10
     },
     date: {
         paddingTop: 5,
         fontStyle: 'italic',
-        color: 'gray'
+        color: 'gray',
+        paddingLeft: 10
     }
 });
