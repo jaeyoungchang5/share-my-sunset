@@ -1,10 +1,10 @@
 // external imports
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { getUserUsername } from '../../middleware';
 
 // internal imports
 import { UserTag } from './UserTag';
+import { getUserUsername } from '../../middleware';
 
 export function Friend({userId, navigation}: any) {
     const [username, setUsername] = useState<string>();
@@ -14,7 +14,6 @@ export function Friend({userId, navigation}: any) {
         getUserUsername(userId)
         .then(res => {
             if (mounted) {
-                console.log('here');
                 setUsername(res.data.username);
             }
         })

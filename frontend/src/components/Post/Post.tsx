@@ -6,11 +6,13 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { getSunsetById, getUserUsername } from '../../middleware';
 import { ISunset } from '../../interfaces';
 import { UserTag } from '../User';
+import { AnimatedLoader } from '../AnimatedLoader';
 
 export function Post({sunsetId, navigation}: any) {
     const [sunset, setSunset] = useState<ISunset>();
     const [timeElapsed, setTimeElapsed] = useState<string>();
     const [username, setUsername] = useState<string>();
+    const [loaded, setLoaded] = useState<boolean>(false);
 
     useEffect(() => {
         let mounted: boolean = true;
@@ -20,6 +22,7 @@ export function Post({sunsetId, navigation}: any) {
             if (mounted) {
                 setTimeElapsed(calculateTimeElapsed(res.data.createdAt));
                 setSunset(res);
+                setLoaded(true);
             }
 
             getUserUsername(res.data.userId)
@@ -54,7 +57,15 @@ export function Post({sunsetId, navigation}: any) {
 
     return (
         <View style={styles.post}>
-            <Image style={styles.postImage} source={{uri: sunset?.data.sunsetImage}}/>
+            <View style={styles.postImage}>
+            {
+                (loaded) ?
+                <Image style={styles.image} source={{uri: sunset?.data.sunsetImage}}/>
+                :
+                <AnimatedLoader />
+            }
+
+            </View>
             <View style={styles.postContent}>
                 <UserTag userId={sunset?.data.userId} username={username} navigation={navigation} />
                 <Text style={styles.caption}>{sunset?.data.description}</Text>
@@ -71,10 +82,13 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.25,
         borderBottomColor: 'grey'
     },
+    postImage: {
+        alignItems: 'center'
+    },
     postAvatar: {
         marginRight: 16
     },
-    postImage: {
+    image: {
         width: '100%',
         height: 300
     },
