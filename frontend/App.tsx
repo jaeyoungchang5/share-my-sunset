@@ -8,31 +8,25 @@ import { NavigationContainer } from '@react-navigation/native';
 // internal imports
 import { AppNav, AuthNav } from './src/navigation';
 import { getUser } from './src/utils';
+import { AppLoadingPage } from './src/pages';
 
 export default function App() {
 	const [userId, setUserId] = useState<string>('');
 
 	const Stack = createNativeStackNavigator();
 
-	// async function loadUser() {
-	// 	const res = await getUser();
-	// 	if (res) {
-	// 		console.log('loadUser');
-	// 		console.log(res);
-	// 		setUserId(res.userId);
-	// 	}
-	// 	return res;
-	// }
-
-	// useEffect(() => {
-	// 	loadUser();
-	// }, []);
-
 	return (
 		<PaperProvider>
 			<SafeAreaProvider>
 				<NavigationContainer>
-					<Stack.Navigator initialRouteName='Auth'>
+					<Stack.Navigator initialRouteName='AppLoading'>
+						<Stack.Screen 
+							name='AppLoading'
+							component={AppLoadingPage}
+							options={{
+								headerShown: false
+							}}
+						/>
 						<Stack.Screen 
 							name='Auth'
 							component={AuthNav}

@@ -1,5 +1,5 @@
 // external imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 
 // internal imports
@@ -10,10 +10,10 @@ export function ProfilePage({route, navigation}: any) {
     const userId: string = route.params.userId;
     
 	return (
-        <>
+        <Fragment>
             <UserInfo userId={userId} route={route} navigation={navigation} />
             <UserNav userId={userId} navigation={navigation} />
-        </>
+        </Fragment>
 	);
 }
 
