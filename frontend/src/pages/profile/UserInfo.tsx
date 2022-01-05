@@ -10,16 +10,13 @@ import { FriendButton } from '../../components';
 import { getUser } from '../../utils';
 
 export function UserInfo({route, navigation, appUserId, userId}: any) {
-    const [isAppUser, setIsAppUser] = useState<boolean>(false);
     const [user, setUser] = useState<IUser>();
-    const [buttonStatus, setButtonStatus] = useState<number>(-1);
 
     const navigationPage: string = route.name;
     
     useEffect(() => {
         let mounted = true;
 		loadUserInfo(mounted);
-        loadFriendStatus(mounted);
 
 		return function cleanup() {
 			mounted = false;
@@ -35,29 +32,10 @@ export function UserInfo({route, navigation, appUserId, userId}: any) {
         })
     }
 
-    function loadFriendStatus(mounted: boolean) {
-        checkFriendStatus(appUserId, userId)
-        .then(res => {
-            if (mounted) {
-                if (res.status == 'Friends') {
-                    setButtonStatus(3);
-                } else if (res.status == 'Pending') {
-                    if (res.data.requester == appUserId && res.data.recipient == userId) {
-                        setButtonStatus(1);
-                    } else if (res.data.recipient == appUserId && res.data.requester == userId) {
-                        setButtonStatus(2);
-                    }
-                } else if (res.status == 'None') {
-                    setButtonStatus(0);
-                }
-            }
-        })
-    }
-
     return (
         <View style={styles.container}>
             {
-                (navigationPage == 'Main Profile Page' && !isAppUser)
+                (navigationPage == 'Main Profile Page' && appUserId == userId)
                 ? 
                 <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Settings', {userId: userId})}>
                     <Ionicons name="ios-settings" size={28} color="black" />
@@ -72,9 +50,9 @@ export function UserInfo({route, navigation, appUserId, userId}: any) {
                 </View>
                 <View>
                     {
-                        (appUserId != userId && buttonStatus > -1)
+                        (appUserId != userId)
                         ? 
-                        <FriendButton buttonStatus={buttonStatus} />
+                        <FriendButton appUserId={appUserId} userId={userId} />
                         :
                         <Fragment></Fragment>
                     }

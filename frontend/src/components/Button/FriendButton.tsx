@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 
 // internal imports
-import { } from '../../middleware';
+import { acceptFriendRequest, checkFriendStatus, rejectFriendRequest, removeFriend, sendFriendRequest } from '../../middleware';
 
 interface IStatus {
     index: number,
@@ -16,10 +16,11 @@ interface IStatusOptions {
 }
 
 interface IFriendButtonProps {
-    buttonStatus: number,
+    appUserId: string,
+    userId: string,
 }
 
-export function FriendButton({ buttonStatus }: IFriendButtonProps) {
+export function FriendButton({ appUserId, userId }: IFriendButtonProps) {
     const statusOptions: IStatusOptions = {
         0: {
             index: 0,
@@ -43,24 +44,69 @@ export function FriendButton({ buttonStatus }: IFriendButtonProps) {
         },
     }
 
-    const [friendState, setFriendState] = useState<IStatus>(statusOptions[buttonStatus]);
+    const [friendState, setFriendState] = useState<IStatus>();
+
+    useEffect(() => {
+        let mounted = true;
+        loadFriendStatus(mounted);
+
+        return function cleanup() {
+            mounted = false;
+        }
+    }, []);
+
+    function loadFriendStatus(mounted: boolean) {
+        checkFriendStatus(appUserId, userId)
+        .then(res => {
+            if (mounted) {
+                if (res.status == 'Friends') {
+                    setFriendState(statusOptions[3]);
+                } else if (res.status == 'Pending') {
+                    if (res.data.requester == appUserId && res.data.recipient == userId) {
+                        setFriendState(statusOptions[1]);
+                    } else if (res.data.recipient == appUserId && res.data.requester == userId) {
+                        setFriendState(statusOptions[2]);
+                    }
+                } else if (res.status == 'None') {
+                    setFriendState(statusOptions[0]);
+                }
+            }
+        })
+    }
 
     function handleClick() {
-        if (friendState.index == 0) {
-            setFriendState(statusOptions[1]);
-        } else if (friendState.index == 1) {
-            setFriendState(statusOptions[0]);
-        } else if (friendState.index == 2) {
-            setFriendState(statusOptions[3]);
-        } else if (friendState.index == 3) {
-            setFriendState(statusOptions[0]);
+        // requester: appUserId, recipient: userId
+        if (friendState?.index == 0) {
+            // send friend request
+            sendFriendRequest(appUserId, userId)
+            .then(res => {
+                setFriendState(statusOptions[1]);
+            })
+        } else if (friendState?.index == 1) {
+            // delete friend request
+            rejectFriendRequest(appUserId, userId)
+            .then(res => {
+                setFriendState(statusOptions[0]);
+            })
+        } else if (friendState?.index == 2) {
+            // accept friend request
+            acceptFriendRequest(appUserId, userId)
+            .then(res => {
+                setFriendState(statusOptions[3]);
+            })
+        } else if (friendState?.index == 3) {
+            // remove friend
+            removeFriend(appUserId, userId)
+            .then(res => {
+                setFriendState(statusOptions[0]);
+            })
         }
     }
 
     return (
-        <View style={friendState.style}>
+        <View style={friendState?.style}>
             <TouchableOpacity style={styles.button} onPress={handleClick}>
-                <Text style={styles.text}>{friendState.name}</Text>
+                <Text style={styles.text}>{friendState?.name}</Text>
             </TouchableOpacity>
         </View>
     )
