@@ -9,7 +9,7 @@ import { Post } from '../../components';
 
 
 export function FeedPage({route, navigation} : any) {
-	const userId: string = route.params.userId;
+	const appUserId: string = route.params.appUserId;
 	const [feed, setFeed] = useState<IFeed>();
 	
 	useEffect(() => {
@@ -22,7 +22,7 @@ export function FeedPage({route, navigation} : any) {
 	}, []);
 
 	function loadFeed(mounted: boolean) {
-		getFeed(userId)
+		getFeed(appUserId)
 		.then(res => {
 			if (mounted) {
 				setFeed(res);

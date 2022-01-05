@@ -11,7 +11,7 @@ import { getUser } from './src/utils';
 import { AppLoadingPage } from './src/pages';
 
 export default function App() {
-	const [userId, setUserId] = useState<string>('');
+	const [appUserId, setAppUserId] = useState<string>('');
 
 	const Stack = createNativeStackNavigator();
 
@@ -37,7 +37,7 @@ export default function App() {
 						<Stack.Screen 
 							name='App'
 							component={AppNav}
-							initialParams={{userId: userId}}
+							initialParams={{appUserId: appUserId}}
 							options={{
 								headerShown: false
 							}}

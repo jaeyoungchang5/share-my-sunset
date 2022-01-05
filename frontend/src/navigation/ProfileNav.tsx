@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ProfilePage, SettingsPage } from "../pages";
 
 export function ProfileNav({route} : any) {
-	const userId: string = route.params.userId;
+	const appUserId: string = route.params.appUserId;
     const Stack = createNativeStackNavigator();
     
     return (
@@ -14,7 +14,7 @@ export function ProfileNav({route} : any) {
             <Stack.Screen 
                 name='Main Profile Page' 
                 component={ProfilePage} 
-                initialParams={{userId: userId}} 
+                initialParams={{userId: appUserId, appUserId: appUserId}} 
                 options={{
                     headerShown: false
                 }} 
@@ -22,7 +22,7 @@ export function ProfileNav({route} : any) {
             <Stack.Screen 
                 name='Profile Page' 
                 component={ProfilePage} 
-                initialParams={{userId: userId}} 
+                initialParams={{userId: appUserId, appUserId: appUserId}} 
                 options={{
                     headerTitle: '', 
                     headerTransparent: true,
@@ -32,7 +32,7 @@ export function ProfileNav({route} : any) {
             <Stack.Screen 
                 name='Settings'
                 component={SettingsPage}
-                initialParams={{userId: userId}}
+                initialParams={{userId: appUserId}}
                 options={{
                     headerTitle: 'Settings', 
                     headerTransparent: true,

@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { UploadPage } from "../pages";
 
 export function UploadNav({route} : any) {
-	const userId: string = route.params.userId;
+	const appUserId: string = route.params.appUserId;
     const Stack = createNativeStackNavigator();
     
     return (
@@ -14,7 +14,7 @@ export function UploadNav({route} : any) {
             <Stack.Screen 
                 name='Upload Home Screen' 
                 component={UploadPage} 
-                initialParams={{userId: userId}} 
+                initialParams={{appUserId: appUserId}} 
                 options={{
                    headerShown: false
                 }} 

@@ -11,7 +11,7 @@ import { ProfileNav } from './ProfileNav';
 import { UploadNav } from './UploadNav';
 
 export function AppNav({route}: any) {
-    const userId: string = route.params.userId;
+    const appUserId: string = route.params.appUserId;
 	const Tab = createBottomTabNavigator(); 
     
     return (
@@ -24,7 +24,7 @@ export function AppNav({route}: any) {
                         return <MaterialIcons name="home-filled" size={size} />
                     })
                 }}
-                initialParams={{userId: userId}}
+                initialParams={{appUserId: appUserId}}
             />
             <Tab.Screen 
                 name='Search' 
@@ -34,7 +34,7 @@ export function AppNav({route}: any) {
                         return <Ionicons name="search-sharp" size={size} />
                     })
                 }}
-                initialParams={{userId: userId}}
+                initialParams={{appUserId: appUserId}}
             />
             <Tab.Screen 
                 name='Upload' 
@@ -44,7 +44,7 @@ export function AppNav({route}: any) {
                         return <MaterialIcons name="add-circle" size={size} />
                     })
                 }}
-                initialParams={{userId: userId}}
+                initialParams={{appUserId: appUserId}}
             />
             <Tab.Screen 
                 name='Notifications' 
@@ -54,7 +54,7 @@ export function AppNav({route}: any) {
                         return <Ionicons name="notifications" size={size} />
                     })
                 }}
-                initialParams={{userId: userId}}
+                initialParams={{appUserId: appUserId}}
             />
             <Tab.Screen 
                 name='Profile' 
@@ -64,7 +64,7 @@ export function AppNav({route}: any) {
                         return <FontAwesome name="user" size={size} />
                     })
                 }}
-                initialParams={{userId: userId}}
+                initialParams={{appUserId: appUserId}}
             />
         </Tab.Navigator>
     )

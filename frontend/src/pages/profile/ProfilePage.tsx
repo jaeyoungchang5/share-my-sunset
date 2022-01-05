@@ -8,10 +8,11 @@ import { UserNav } from '../../navigation/UserNav';
 
 export function ProfilePage({route, navigation}: any) {
     const userId: string = route.params.userId;
+    const appUserId: string = route.params.appUserId;
     
 	return (
         <Fragment>
-            <UserInfo userId={userId} route={route} navigation={navigation} />
+            <UserInfo appUserId={appUserId} userId={userId} route={route} navigation={navigation} />
             <UserNav userId={userId} navigation={navigation} />
         </Fragment>
 	);

@@ -6,7 +6,7 @@ import { FeedPage, ProfilePage } from "../pages";
 // internal imports
 
 export function FeedNav({route} : any) {
-	const userId: string = route.params.userId;
+	const appUserId: string = route.params.appUserId;
     const Stack = createNativeStackNavigator();
     
     return (
@@ -14,13 +14,13 @@ export function FeedNav({route} : any) {
             <Stack.Screen 
                 name='Home Page' 
                 component={FeedPage} 
-                initialParams={{userId: userId}} 
+                initialParams={{appUserId: appUserId}} 
                 options={{headerShown: false}} 
             />
             <Stack.Screen 
                 name='Profile Page' 
                 component={ProfilePage} 
-                initialParams={{userId: userId}} 
+                initialParams={{userId: appUserId, appUserId: appUserId}} 
                 options={{
                     headerTitle: '', 
                     headerTransparent: true,

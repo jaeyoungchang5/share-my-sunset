@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
 
 // internal imports
+import { } from '../../middleware';
 
 interface IStatus {
     index: number,
@@ -10,8 +11,16 @@ interface IStatus {
     style: object,
 }
 
-export function FriendButton() {
-    const statusOptions = {
+interface IStatusOptions {
+    [key: number]: IStatus,
+}
+
+interface IFriendButtonProps {
+    buttonStatus: number,
+}
+
+export function FriendButton({ buttonStatus }: IFriendButtonProps) {
+    const statusOptions: IStatusOptions = {
         0: {
             index: 0,
             name: 'Follow',
@@ -33,7 +42,8 @@ export function FriendButton() {
             style: styles.greenContainer
         },
     }
-    const [friendState, setFriendState] = useState<IStatus>(statusOptions[2]);
+
+    const [friendState, setFriendState] = useState<IStatus>(statusOptions[buttonStatus]);
 
     function handleClick() {
         if (friendState.index == 0) {

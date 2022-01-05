@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { IShareSunsetInfo } from '../../interfaces';
 import { shareSunset } from '../../middleware';
 
-export function Upload({userId}: any) {
+export function Upload({appUserId}: any) {
 	const [image, setImage] = useState<Blob>();
 	const [imageUri, setImageUri] = useState<string>();
 	const [b64Image, setB64Image] = useState<string>();
@@ -48,7 +48,7 @@ export function Upload({userId}: any) {
 		}
 
 		let sunset: IShareSunsetInfo = {
-			userId: userId,
+			userId: appUserId,
 			description: caption,
 			sunsetImage: image
 		}

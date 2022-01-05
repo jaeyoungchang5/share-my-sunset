@@ -5,19 +5,21 @@ import { Ionicons } from '@expo/vector-icons';
 
 // internal imports
 import { IUser } from '../../interfaces';
-import { getUserInfo } from '../../middleware';
+import { getUserInfo, checkFriendStatus } from '../../middleware';
 import { FriendButton } from '../../components';
 import { getUser } from '../../utils';
 
-export function UserInfo({route, navigation, userId}: any) {
+export function UserInfo({route, navigation, appUserId, userId}: any) {
     const [isAppUser, setIsAppUser] = useState<boolean>(false);
     const [user, setUser] = useState<IUser>();
+    const [buttonStatus, setButtonStatus] = useState<number>(-1);
+
     const navigationPage: string = route.name;
     
     useEffect(() => {
         let mounted = true;
 		loadUserInfo(mounted);
-        loadAppUser(mounted);
+        loadFriendStatus(mounted);
 
 		return function cleanup() {
 			mounted = false;
@@ -33,12 +35,20 @@ export function UserInfo({route, navigation, userId}: any) {
         })
     }
 
-    function loadAppUser(mounted: boolean) {
-        getUser()
-        .then((res) => {
+    function loadFriendStatus(mounted: boolean) {
+        checkFriendStatus(appUserId, userId)
+        .then(res => {
             if (mounted) {
-                if (userId == res.body.userId) {
-                    setIsAppUser(true);
+                if (res.status == 'Friends') {
+                    setButtonStatus(3);
+                } else if (res.status == 'Pending') {
+                    if (res.data.requester == appUserId && res.data.recipient == userId) {
+                        setButtonStatus(1);
+                    } else if (res.data.recipient == appUserId && res.data.requester == userId) {
+                        setButtonStatus(2);
+                    }
+                } else if (res.status == 'None') {
+                    setButtonStatus(0);
                 }
             }
         })
@@ -62,11 +72,11 @@ export function UserInfo({route, navigation, userId}: any) {
                 </View>
                 <View>
                     {
-                        isAppUser
+                        (appUserId != userId && buttonStatus > -1)
                         ? 
-                        <Fragment></Fragment>
+                        <FriendButton buttonStatus={buttonStatus} />
                         :
-                        <FriendButton />
+                        <Fragment></Fragment>
                     }
                 </View>
                 <View style={styles.userBioRow}>

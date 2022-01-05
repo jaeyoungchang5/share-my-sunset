@@ -12,7 +12,7 @@ export function AppLoadingPage ({navigation}: any) {
     async function loadUser() {
 		const res = await getUser();
 		if (res) {
-			navigation.navigate('App', {userId: res.body.userId});
+			navigation.navigate('App', {appUserId: res.body.userId});
 		} else {
             navigation.navigate('Auth');
         }

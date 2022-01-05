@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, Sty
 import { Upload } from '../../components';
 
 export function UploadPage({route}: any) {
-	const userId: string = route.params.userId;
+	const appUserId: string = route.params.appUserId;
 	
 	return (
 		<KeyboardAvoidingView
@@ -15,7 +15,7 @@ export function UploadPage({route}: any) {
 		>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<View>
-					<Upload userId={userId} />
+					<Upload appUserId={appUserId} />
 				</View>
 			</TouchableWithoutFeedback>
 		</KeyboardAvoidingView>
