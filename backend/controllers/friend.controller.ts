@@ -2,6 +2,7 @@
  * @fileoverview friend.controller.ts
  * This file contains all the controller functions for the friend collection.
  * Functions: 
+    ** checkFriendStatus
     ** getUsersFriends
     ** sendFriendRequest
     ** acceptFriendRequest
@@ -14,6 +15,47 @@ import { debuglog } from '../helpers';
 import { User, IUserModel, FriendRequest } from '../models';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+
+/**
+ * @description Check status of 2 users
+ * @param {ObjectId} req.body.userIdA User A Id
+ * @param {ObjectId} req.body.userIdB User B Id
+ */
+export function checkFriendStatus(req: Request, res: Response): void {
+    if (!req.body.userIdA || !req.body.userIdB) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        userIdA: new mongoose.Types.ObjectId(req.body.userIdA),
+        userIdB: new mongoose.Types.ObjectId(req.body.userIdB)
+    }
+
+    User.findOne({
+        $or: [
+            { _id: body.userIdA, friends: body.userIdB },
+            { _id: body.userIdB, friends: body.userIdA }
+        ]
+    }).then(response => {
+        if (response != null) {
+            res.status(200).json({result: 'success', status: 'Friends', message: 'Users are friends.'});
+            return;
+        }
+        FriendRequest.find({$or: [
+            { requester: body.userIdA, recipient: body.userIdB },
+            { recipient: body.userIdA, requester: body.userIdB }
+        ]}).then(response => {
+            if (response.length != 0) {
+                res.status(200).json({result: 'success', status: 'Pending', message: 'Users are pending friends.', data: response});
+                return;
+            } 
+
+            res.status(200).json({result: 'success', status: 'None', message: 'Users have no relationship.'});
+        })
+    })
+
+}
 
 /**
  * @description Gets user's friends by userId

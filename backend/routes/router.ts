@@ -41,6 +41,7 @@ router.post('/sunset/deleteSunset', sunsetCtrl.deleteSunset);
 router.post('/sunset/updateSunsetCaption', sunsetCtrl.updateSunsetCaption);
 
 // friends
+router.post('/friend/checkFriendStatus', friendCtrl.checkFriendStatus);
 router.post('/friend/getUsersFriends', friendCtrl.getUsersFriends);
 router.post('/friend/sendFriendRequest', friendCtrl.sendFriendRequest);
 router.post('/friend/acceptFriendRequest', friendCtrl.acceptFriendRequest);
