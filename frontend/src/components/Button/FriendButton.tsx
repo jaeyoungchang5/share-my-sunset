@@ -62,9 +62,9 @@ export function FriendButton({ appUserId, userId }: IFriendButtonProps) {
                 if (res.status == 'Friends') {
                     setFriendState(statusOptions[3]);
                 } else if (res.status == 'Pending') {
-                    if (res.data.requester == appUserId && res.data.recipient == userId) {
+                    if (res.data[0].requester == appUserId && res.data[0].recipient == userId) {
                         setFriendState(statusOptions[1]);
-                    } else if (res.data.recipient == appUserId && res.data.requester == userId) {
+                    } else if (res.data[0].recipient == appUserId && res.data[0].requester == userId) {
                         setFriendState(statusOptions[2]);
                     }
                 } else if (res.status == 'None') {
@@ -90,7 +90,7 @@ export function FriendButton({ appUserId, userId }: IFriendButtonProps) {
             })
         } else if (friendState?.index == 2) {
             // accept friend request
-            acceptFriendRequest(appUserId, userId)
+            acceptFriendRequest(userId, appUserId)
             .then(res => {
                 setFriendState(statusOptions[3]);
             })

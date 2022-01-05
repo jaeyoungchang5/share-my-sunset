@@ -4,3 +4,4 @@ export * from './FeedNav';
 export * from './ProfileNav';
 export * from './AuthNav';
 export * from './UploadNav';
+export * from './SearchNav';

@@ -5,10 +5,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 // internal imports
-import { NotificationsPage, SearchPage } from '../pages';
+import { NotificationsPage } from '../pages';
 import { FeedNav } from './FeedNav';
 import { ProfileNav } from './ProfileNav';
 import { UploadNav } from './UploadNav';
+import { SearchNav } from './SearchNav';
 
 export function AppNav({route}: any) {
     const appUserId: string = route.params.appUserId;
@@ -28,7 +29,7 @@ export function AppNav({route}: any) {
             />
             <Tab.Screen 
                 name='Search' 
-                component={SearchPage}
+                component={SearchNav}
                 options={{
                     tabBarIcon: (({focused, color, size}) => {
                         return <Ionicons name="search-sharp" size={size} />
