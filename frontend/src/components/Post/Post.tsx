@@ -7,7 +7,7 @@ import { Entypo } from '@expo/vector-icons';
 import { getSunsetById, getUserUsername } from '../../middleware';
 import { ISunset } from '../../interfaces';
 import { UserTag } from '../User';
-import { AnimatedLoader } from '../AnimatedLoader';
+import { AsyncLoad } from '../AsyncLoad';
 
 export function Post({sunsetId, navigation}: any) {
     const [sunset, setSunset] = useState<ISunset>();
@@ -69,7 +69,7 @@ export function Post({sunsetId, navigation}: any) {
                 (loaded) ?
                 <Image style={styles.image} source={{uri: sunset?.data.sunsetImage}}/>
                 :
-                <AnimatedLoader />
+                <AsyncLoad />
             }
 
             </View>

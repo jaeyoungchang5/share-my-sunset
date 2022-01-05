@@ -1,19 +1,23 @@
 // external imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 // internal imports
 import { IUser } from '../../interfaces';
 import { getUserInfo } from '../../middleware';
+import { FriendButton } from '../../components';
+import { getUser } from '../../utils';
 
 export function UserInfo({route, navigation, userId}: any) {
+    const [isAppUser, setIsAppUser] = useState<boolean>(false);
     const [user, setUser] = useState<IUser>();
     const navigationPage: string = route.name;
     
     useEffect(() => {
         let mounted = true;
 		loadUserInfo(mounted);
+        loadAppUser(mounted);
 
 		return function cleanup() {
 			mounted = false;
@@ -29,21 +33,41 @@ export function UserInfo({route, navigation, userId}: any) {
         })
     }
 
+    function loadAppUser(mounted: boolean) {
+        getUser()
+        .then((res) => {
+            if (mounted) {
+                if (userId == res.body.userId) {
+                    setIsAppUser(true);
+                }
+            }
+        })
+    }
+
     return (
         <View style={styles.container}>
             {
-                (navigationPage == 'Main Profile Page')
+                (navigationPage == 'Main Profile Page' && !isAppUser)
                 ? 
                 <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate('Settings', {userId: userId})}>
                     <Ionicons name="ios-settings" size={28} color="black" />
                 </TouchableOpacity>
                 :
-                <></>
+                <Fragment></Fragment>
             }
             <View style={styles.userRow}>
                 <View style={styles.userNameRow}>
                     <Text style={styles.userNameText}>{user?.firstName} {user?.lastName}</Text>
                     <Text style={styles.usernameText}>@{user?.username}</Text>
+                </View>
+                <View>
+                    {
+                        isAppUser
+                        ? 
+                        <Fragment></Fragment>
+                        :
+                        <FriendButton />
+                    }
                 </View>
                 <View style={styles.userBioRow}>
                     <Text style={styles.userBioText}>{user?.bio}</Text>
@@ -61,17 +85,17 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         height: '20%',
     },
-    userRow: {
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginBottom: 12,
-    },
     settingsButton: {
         alignSelf: 'flex-end',
         marginTop: 10,
         paddingRight: 10,
         position: 'absolute'
+    },
+    userRow: {
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginBottom: 12,
     },
     userNameRow: {
         marginBottom: 10,
@@ -88,6 +112,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
     },
     userBioRow: {
+        marginTop: 10,
         marginLeft: 40,
         marginRight: 40,
     },

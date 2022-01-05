@@ -5,7 +5,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 // internal imports
 import LottieView from 'lottie-react-native'
 
-export function AnimatedLoader() {
+export function AsyncLoad() {
     return (
         <LottieView
             source={require('../../../assets/sunset.json')}

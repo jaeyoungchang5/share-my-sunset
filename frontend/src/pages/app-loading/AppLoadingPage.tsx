@@ -4,7 +4,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // internal imports
-import { AnimatedLoader } from '../../components';
+import { AsyncLoad } from '../../components';
 import { getUser } from '../../utils';
 
 export function AppLoadingPage ({navigation}: any) {
@@ -26,7 +26,7 @@ export function AppLoadingPage ({navigation}: any) {
     return (
         <SafeAreaProvider>
         <View style={styles.app_loading}>
-            <AnimatedLoader />
+            <AsyncLoad />
         </View>
 
         </SafeAreaProvider>
