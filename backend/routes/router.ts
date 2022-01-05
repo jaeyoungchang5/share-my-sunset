@@ -14,6 +14,7 @@ import * as userCtrl from '../controllers/user.controller';
 import * as sunsetCtrl from '../controllers/sunset.controller';
 import * as friendCtrl from '../controllers/friend.controller';
 import * as feedCtrl from '../controllers/feed.controller';
+import * as searchCtrl from '../controllers/search.controller';
 
 /* ROUTE ENDPOINTS */
 
@@ -50,6 +51,9 @@ router.post('/friend/removeFriend', friendCtrl.removeFriend);
 
 // feed
 router.post('/getFeed', feedCtrl.getFeed);
+
+// search
+router.post('/search', searchCtrl.searchUsers);
 
 export {
     router
