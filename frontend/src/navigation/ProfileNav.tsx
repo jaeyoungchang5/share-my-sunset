@@ -1,9 +1,9 @@
 // external imports
 import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ProfilePage, SettingsPage } from "../pages";
 
 // internal imports
+import { ProfilePage, SettingsPage } from "../pages";
 
 export function ProfileNav({route} : any) {
 	const userId: string = route.params.userId;

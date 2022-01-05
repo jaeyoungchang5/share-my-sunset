@@ -1,3 +1,4 @@
+import { IShareSunsetInfo } from '../interfaces';
 import { CURRENT_SERVER } from './server.middleware';
 
 export function getSunsetById(sunsetId: string) {
@@ -33,5 +34,29 @@ export function getSunsetIdsByUserId(userId: string) {
     .then(res => {
         if (res.ok) return res.json();
         throw new Error('Getting sunset ids by user id failed');
+    })
+}
+
+export function shareSunset(sunsetInfo: IShareSunsetInfo) {
+    let formData = new FormData();
+    formData.append('userId', sunsetInfo.userId);
+    formData.append('description', sunsetInfo.description);
+    formData.append('file', sunsetInfo.sunsetImage);
+    // formData.append('file[sunsetImage]', sunsetInfo.sunsetImage);
+    console.log(formData);
+    return fetch(CURRENT_SERVER + '/sunset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data; ', 'Accept': 'application/json' },
+        body: formData
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+    }).catch(err => {
+        console.log('error');
+        console.log(err);
+        throw new Error('Sharing sunset failed');
+    }).then(resData => {
+        console.log('res data');
+        console.log(resData);
     })
 }

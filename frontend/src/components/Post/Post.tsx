@@ -1,6 +1,7 @@
 // external imports
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 
 // internal imports
 import { getSunsetById, getUserUsername } from '../../middleware';
@@ -57,6 +58,12 @@ export function Post({sunsetId, navigation}: any) {
 
     return (
         <View style={styles.post}>
+            <View style={styles.postHeader}>
+                <UserTag userId={sunset?.data.userId} username={username} navigation={navigation} />
+                <TouchableOpacity style={styles.postInfoButton}>
+                    <Entypo name="dots-three-horizontal" size={24} color="black" />
+                </TouchableOpacity>
+            </View>
             <View style={styles.postImage}>
             {
                 (loaded) ?
@@ -67,7 +74,6 @@ export function Post({sunsetId, navigation}: any) {
 
             </View>
             <View style={styles.postContent}>
-                <UserTag userId={sunset?.data.userId} username={username} navigation={navigation} />
                 <Text style={styles.caption}>{sunset?.data.description}</Text>
                 <Text style={styles.date}>{timeElapsed}</Text>
             </View>
@@ -77,10 +83,10 @@ export function Post({sunsetId, navigation}: any) {
 
 const styles = StyleSheet.create({
     post: {
-        marginBottom: 25,
         justifyContent: 'center',
-        borderBottomWidth: 0.25,
-        borderBottomColor: 'grey'
+        paddingBottom: 15,
+        // borderBottomWidth: 0.25,
+        // borderBottomColor: 'grey'
     },
     postImage: {
         alignItems: 'center'
@@ -92,8 +98,18 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 300
     },
+    postHeader: {
+        justifyContent: 'center',
+    },
     postContent: {
-        paddingBottom: 10
+        paddingTop: 10,
+        // paddingBottom: 10
+    },
+    postInfoButton: {
+        alignSelf: 'flex-end',
+        marginTop: 10,
+        paddingRight: 10,
+        position: 'absolute'
     },
     caption: {
         paddingLeft: 10

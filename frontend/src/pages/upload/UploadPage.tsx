@@ -1,24 +1,30 @@
 // external imports 
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 
 // internal imports
+import { Upload } from '../../components';
 
-export function UploadPage() {
+export function UploadPage({route}: any) {
+	const userId: string = route.params.userId;
+	
 	return (
-		<View style={styles.container}>
-			<Text>Enjoy your upload page!</Text>
-			<StatusBar style="auto" />
-		</View>
+		<KeyboardAvoidingView
+			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			style={styles.container}
+		>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<View>
+					<Upload userId={userId} />
+				</View>
+			</TouchableWithoutFeedback>
+		</KeyboardAvoidingView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-	},
+        backgroundColor: '#ededed'
+	}
 });

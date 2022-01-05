@@ -9,3 +9,9 @@ export interface ISunset {
         updatedAt: Date,
     }
 }
+
+export interface IShareSunsetInfo {
+    userId: string,
+    description: string,
+    sunsetImage: Blob,
+}

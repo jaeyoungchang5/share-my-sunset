@@ -5,9 +5,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 // internal imports
-import { NotificationsPage, UploadPage, SearchPage, ProfilePage } from '../pages';
+import { NotificationsPage, SearchPage } from '../pages';
 import { FeedNav } from './FeedNav';
 import { ProfileNav } from './ProfileNav';
+import { UploadNav } from './UploadNav';
 
 export function AppNav({route}: any) {
     const userId: string = route.params.userId;
@@ -37,7 +38,7 @@ export function AppNav({route}: any) {
             />
             <Tab.Screen 
                 name='Upload' 
-                component={UploadPage}
+                component={UploadNav}
                 options={{
                     tabBarIcon: (({focused, color, size}) => {
                         return <MaterialIcons name="add-circle" size={size} />
