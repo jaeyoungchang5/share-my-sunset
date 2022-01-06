@@ -27,6 +27,18 @@ export function getUsersFriends(userId: string) {
     })
 }
 
+export function getUsersFriendRequests(userId: string) {
+    return fetch(CURRENT_SERVER + '/friend/getUsersFriendRequests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({userId: userId})
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Getting users friend requests info by id failed');
+    })
+}
+
 export function sendFriendRequest(requester: string, recipient: string) {
     return fetch(CURRENT_SERVER + '/friend/sendFriendRequest', {
         method: 'POST',

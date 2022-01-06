@@ -20,6 +20,13 @@ export function NotificationsNav({route} : any) {
                 }} 
             />
             <Stack.Screen 
+                name='Friend Requests' 
+                component={NotificationsPage} 
+                initialParams={{appUserId: appUserId}} 
+                options={{
+                }} 
+            />
+            <Stack.Screen 
                 name='Profile Page' 
                 component={ProfilePage} 
                 initialParams={{userId: appUserId, appUserId: appUserId}} 
