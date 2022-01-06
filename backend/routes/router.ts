@@ -44,6 +44,7 @@ router.post('/sunset/updateSunsetCaption', sunsetCtrl.updateSunsetCaption);
 // friends
 router.post('/friend/checkFriendStatus', friendCtrl.checkFriendStatus);
 router.post('/friend/getUsersFriends', friendCtrl.getUsersFriends);
+router.post('/friend/getUsersFriendRequests', friendCtrl.getUsersFriendRequests);
 router.post('/friend/sendFriendRequest', friendCtrl.sendFriendRequest);
 router.post('/friend/acceptFriendRequest', friendCtrl.acceptFriendRequest);
 router.post('/friend/rejectFriendRequest', friendCtrl.rejectFriendRequest);

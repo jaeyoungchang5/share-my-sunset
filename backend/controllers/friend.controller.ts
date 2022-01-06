@@ -4,6 +4,7 @@
  * Functions: 
     ** checkFriendStatus
     ** getUsersFriends
+    ** getUsersFriendRequests
     ** sendFriendRequest
     ** acceptFriendRequest
     ** rejectFriendRequest
@@ -82,6 +83,39 @@ export function getUsersFriends(req: Request, res: Response): void {
         }
     }).catch(err => { // catch errors
         debuglog('ERROR', 'friend controller - getUsersFriends', err);
+        res.status(400).json(err);
+        return;
+    })
+}
+
+/**
+ * @description Gets user's friends by userId
+ * @param {ObjectId} req.body.userId Requester
+ */
+export function getUsersFriendRequests(req: Request, res: Response): void {
+    if (!req.body.userId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        userId: new mongoose.Types.ObjectId(req.body.userId)
+    }
+
+    FriendRequest.find({recipient: body.userId}).sort({createdAt: 'descending'}).select('requester')
+    .then(existingRequests => {
+        if (existingRequests.length == 0) {
+            debuglog('LOG', 'friend controller - getUsersFriendRequests', 'no friend requests');
+            res.status(200).json({result: 'success', message: 'No friend requests.'});
+            return;
+        }
+        
+        debuglog('LOG', 'friend controller - getUsersFriendRequests', 'got all friend requests');
+        res.status(200).json({result: 'success', message: 'Got all friend requests.', data: existingRequests});
+        return;
+
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'friend controller - getUsersFriendRequests', err);
         res.status(400).json(err);
         return;
     })
