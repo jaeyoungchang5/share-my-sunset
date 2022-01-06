@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import { UserTag } from '../../components';
+import { FullUserTag, UserTag } from '../../components';
 
 // internal imports
 import { searchUsers } from '../../middleware';
@@ -42,10 +42,13 @@ export function SearchPage({route, navigation} : any) {
 
 	function renderItem({item}: any) {
 		return (
-			<View>
-				<Text>{item.firstName} {item.lastName}</Text>
-				<UserTag username={item.username} userId={item._id} navigation={navigation} />
-			</View>
+			<FullUserTag 
+				userId={item._id} 
+				username={item.username} 
+				firstName={item.firstName} 
+				lastName={item.lastName}
+				navigation={navigation}
+			/>
 		)
 	}
 	return (
@@ -71,7 +74,7 @@ export function SearchPage({route, navigation} : any) {
 					keyExtractor={(item) => item._id}
 				/>
 				:
-				<Text>No results</Text>
+				<Text style={styles.noResult}>No results</Text>
 			}
 
 		</KeyboardAvoidingView>
@@ -90,5 +93,9 @@ const styles = StyleSheet.create({
 	searchList: {
 		flex: 1,
 		overflow: 'hidden'
+	},
+	noResult: {
+        paddingTop: 10,
+        paddingBottom: 10,
 	}
 });
