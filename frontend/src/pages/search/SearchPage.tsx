@@ -84,8 +84,7 @@ export function SearchPage({route, navigation} : any) {
 const styles = StyleSheet.create({
 	container: {
         flex: 1,
-        backgroundColor: '#FFF',
-        alignItems: 'center',
+        backgroundColor: '#FFF'
 	},
 	searchBarText: {
 		fontSize: 14
@@ -95,7 +94,6 @@ const styles = StyleSheet.create({
 		overflow: 'hidden'
 	},
 	noResult: {
-        paddingTop: 10,
-        paddingBottom: 10,
+        padding: 10
 	}
 });

@@ -5,3 +5,4 @@ export * from './ProfileNav';
 export * from './AuthNav';
 export * from './UploadNav';
 export * from './SearchNav';
+export * from './NotificationsNav';

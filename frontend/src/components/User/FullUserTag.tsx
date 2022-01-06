@@ -21,9 +21,8 @@ const styles = StyleSheet.create({
     fullUserTag: {
         paddingTop: 10,
         paddingBottom: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
+        paddingLeft: 10,
+        flexDirection: 'row'
     },
     fullUserTagText: {
         fontWeight: 'bold'
