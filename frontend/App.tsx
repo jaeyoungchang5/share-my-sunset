@@ -13,6 +13,10 @@ import { AppLoadingPage } from './src/pages';
 export default function App() {
 	const [appUserId, setAppUserId] = useState<string>('');
 
+	useEffect(() => {
+
+	}, [appUserId]);
+
 	const Stack = createNativeStackNavigator();
 
 	return (

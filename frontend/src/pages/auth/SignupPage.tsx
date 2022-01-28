@@ -21,7 +21,7 @@ export function SignupPage({navigation}: any) {
         .then(() => {
             getUser()
             .then((res) => {
-                navigation.navigate('App', {userId: res.body.userId});
+                navigation.navigate('App', {appUserId: res.body.userId});
             })
         }).catch(err => {
             // notify user that username has already been taken

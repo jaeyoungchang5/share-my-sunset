@@ -20,7 +20,7 @@ export function LoginPage({route, navigation}: any) {
         .then(() => {
             getUser()
             .then((res) => {
-                navigation.navigate('App', {userId: res.body.userId});
+                navigation.navigate('App', {appUserId: res.body.userId});
             })
         }).catch(err => {
             // notify user of bad credentials
