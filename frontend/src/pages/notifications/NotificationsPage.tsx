@@ -1,6 +1,6 @@
 // external imports
 import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View, RefreshControl } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { getUsersFriendRequests } from '../../middleware';
 import { FullUserTag, UserTag } from '../../components';
@@ -20,15 +20,20 @@ interface IFriendRequests {
 
 export function NotificationsPage({route, navigation}: any) {
     const appUserId: string = route.params.appUserId;
-
+	
+	const [refreshing, setRefreshing] = useState(false);
 	const [friendRequests, setFriendRequests] = useState<IFriendRequests>();
 
 	useEffect(() => {
+		loadFriendRequests();
+	}, []);
+
+	function loadFriendRequests() {
 		getUsersFriendRequests(appUserId)
 		.then(res => {
 			setFriendRequests(res);
 		})
-	}, []);
+	}
 
 	function renderItem({item} : any) {
 		return (
@@ -40,10 +45,17 @@ export function NotificationsPage({route, navigation}: any) {
 		)
 	}
 
+	function onRefresh() {
+		setRefreshing(true);
+		setTimeout(() => {
+			loadFriendRequests();
+			setRefreshing(false);
+		}, 700)
+	}
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.title}>
-
 				<Text style={styles.titleText}>Friend Requests</Text>
 			</View>
 			<FlatList
@@ -51,6 +63,13 @@ export function NotificationsPage({route, navigation}: any) {
 				data={friendRequests?.data}
 				renderItem={renderItem}
 				keyExtractor={(item) => item._id}
+				refreshing={refreshing}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+					/>
+				}
 			/>
 		</View>
 	);

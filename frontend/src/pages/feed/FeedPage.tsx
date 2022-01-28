@@ -1,6 +1,6 @@
 // external imports
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, RefreshControl } from 'react-native';
 
 // internal imports
 import { IFeed } from '../../interfaces';
@@ -11,22 +11,16 @@ import { Post } from '../../components';
 export function FeedPage({route, navigation} : any) {
 	const appUserId: string = route.params.appUserId;
 	const [feed, setFeed] = useState<IFeed>();
+	const [refreshing, setRefreshing] = useState(false);
 	
 	useEffect(() => {
-		let mounted = true;
-		loadFeed(mounted);
-
-		return function cleanup() {
-			mounted = false;
-		}
+		loadFeed();
 	}, []);
 
-	function loadFeed(mounted: boolean) {
+	function loadFeed() {
 		getFeed(appUserId)
 		.then(res => {
-			if (mounted) {
-				setFeed(res);
-			}
+			setFeed(res);
 		})
 	}
 
@@ -36,11 +30,26 @@ export function FeedPage({route, navigation} : any) {
 		);
 	}
 
+	function onRefresh() {
+		setRefreshing(true);
+		setTimeout(() => {
+			loadFeed();
+			setRefreshing(false);
+		}, 700)
+	}
+
 	return (
 		<FlatList style={styles.scroll}
 			data={feed?.data}
 			renderItem={renderItem}
 			keyExtractor={(item) => item._id}
+			refreshing={refreshing}
+			refreshControl={
+				<RefreshControl
+					refreshing={refreshing}
+					onRefresh={onRefresh}
+				/>
+			}
 		/>
 	);
 }
