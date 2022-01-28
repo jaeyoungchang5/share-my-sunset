@@ -10,7 +10,7 @@ export function UserTag({username, userId, navigation}: any) {
         <View>
             {/* <Text style={styles.name}>{name}</Text> */}
             <TouchableOpacity
-                onPress={() => navigation.navigate('Profile Page', {userId: userId})}
+                onPress={() => navigation.push('Profile Page', {userId: userId})}
             >
                 <Text style={styles.username}>@{username}</Text>
             </TouchableOpacity>
