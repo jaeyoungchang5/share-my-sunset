@@ -1,12 +1,13 @@
 // external imports
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, StatusBar, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 
 // internal imports
 import { login } from '../../middleware';
 import { getUser } from '../../utils';
 import { ILoginCredentials } from '../../interfaces';
 import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
+import { styles } from '../../styles';
 
 export function LoginPage({route, navigation}: any) {
     const [loginUser, setLoginUser] = useState<ILoginCredentials>({
@@ -31,6 +32,7 @@ export function LoginPage({route, navigation}: any) {
         <View style={styles.container}>
             {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
 
+            {/* <KeyboardAvoidingView style={styles.keyboardAvoid} behavior={"position"} keyboardVerticalOffset={0}> */}
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.TextInput}
@@ -60,59 +62,7 @@ export function LoginPage({route, navigation}: any) {
                 <Text style={styles.link}>Sign up</Text>
                 </TouchableOpacity>
             </View>
+            {/* </KeyboardAvoidingView> */}
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-
-    image: {
-        marginBottom: 40,
-    },
-
-    inputView: {
-        backgroundColor: "#FFC0CB",
-        borderRadius: 30,
-        width: "70%",
-        height: 45,
-        marginBottom: 20,
-        alignItems: "center",
-    },
-
-    TextInput: {
-        height: 50,
-        flex: 1,
-        padding: 10,
-        marginLeft: 20,
-    },
-
-    forgot_button: {
-        height: 30,
-        marginBottom: 30,
-    },
-    loginText: {
-        fontWeight: 'bold'
-    },
-    loginBtn: {
-        width: "70%",
-        borderRadius: 25,
-        height: 50,
-        alignItems: "center",
-        justifyContent: "center",
-        marginTop: 40,
-        backgroundColor: "#FF1493",
-    },
-    row: {
-        flexDirection: 'row',
-        marginTop: 20,
-    },
-    link: {
-        fontWeight: 'bold',
-    },
-});
