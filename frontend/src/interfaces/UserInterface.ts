@@ -21,10 +21,20 @@ export interface IPostIds {
 export interface IFriends {
     result: string,
     message: string,
-    data: {
-        _id: string,
-        friends: string[]
-    }
+    data: IUserMetaData[],
+}
+
+export interface IFriendRequests {
+	result: string,
+	message: string,
+	data: IUserMetaData[],
+}
+
+export interface IUserMetaData {
+    _id: string,
+    firstName: string,
+    lastName: string,
+    username: string,
 }
 
 export interface ILoginCredentials {

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 
 // internal imports
-import { UserTag, Friend } from '../../components';
+import { FullUserTag } from '../../components';
 import { getUsersFriends } from '../../middleware/friend.middleware';
 import { IFriends } from '../../interfaces';
 
@@ -27,14 +27,20 @@ export function UserFriends({route, navigation}: any) {
 
     function renderItem({ item } : any) {
 		return (
-            <Friend userId={item} navigation={navigation} />
+            <FullUserTag
+				userId={item._id}
+				firstName={item.firstName}
+				lastName={item.lastName}
+				username={item.username}
+				navigation={navigation}
+			/>
 		);
 	}
     return (
         <FlatList style={styles.scroll}
-            data={friends?.data.friends}
+            data={friends?.data}
             renderItem={renderItem}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item._id}
         />
     );
 }

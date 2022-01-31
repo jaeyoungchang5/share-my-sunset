@@ -9,7 +9,7 @@ export function FullUserTag({username, userId, firstName, lastName, navigation}:
     return (
         <View style={styles.fullUserTag}>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Profile Page', {userId: userId})}
+                onPress={() => navigation.push('Profile Page', {userId: userId})}
             >
                 <Text style={styles.fullUserTagText}>{firstName} {lastName} (@{username})</Text>
             </TouchableOpacity>

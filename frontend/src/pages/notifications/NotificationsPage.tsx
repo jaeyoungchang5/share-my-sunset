@@ -6,17 +6,7 @@ import { getUsersFriendRequests } from '../../middleware';
 import { FullUserTag, UserTag } from '../../components';
 
 // internal imports
-
-interface IFriendRequest {
-	_id: string,
-	requester: string,
-}
-
-interface IFriendRequests {
-	result: string,
-	message: string,
-	data: IFriendRequest[],
-}
+import { IFriendRequests } from '../../interfaces';
 
 export function NotificationsPage({route, navigation}: any) {
     const appUserId: string = route.params.appUserId;
@@ -38,10 +28,10 @@ export function NotificationsPage({route, navigation}: any) {
 	function renderItem({item} : any) {
 		return (
 			<FullUserTag
-				userId={item.requester}
-				firstName={""}
-				lastName={""}
-				username={item.requester}
+				userId={item._id}
+				firstName={item.firstName}
+				lastName={item.lastName}
+				username={item.username}
 				navigation={navigation}
 			/>
 		)
