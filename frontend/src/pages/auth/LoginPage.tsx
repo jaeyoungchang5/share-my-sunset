@@ -1,12 +1,12 @@
 // external imports
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, StatusBar, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { useToast } from 'native-base';
 
 // internal imports
 import { login } from '../../middleware';
 import { getUser } from '../../utils';
 import { ILoginCredentials } from '../../interfaces';
-import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 import { styles } from '../../styles';
 
 export function LoginPage({route, navigation}: any) {
@@ -15,8 +15,18 @@ export function LoginPage({route, navigation}: any) {
         password: ''
     });
 
+    const toast = useToast();
+
     function handleLoginButton(event: any) {
         event.preventDefault();
+
+        if (loginUser.username.length == 0 || loginUser.password.length == 0) {
+            return toast.show({
+                title: 'Please fill out required fields',
+                placement: 'top'
+            })
+        }
+
         login(loginUser)
         .then(() => {
             getUser()
@@ -24,7 +34,10 @@ export function LoginPage({route, navigation}: any) {
                 navigation.navigate('App', {appUserId: res.body.userId});
             })
         }).catch(err => {
-            // notify user of bad credentials
+            return toast.show({
+                title: 'Login failed',
+                placement: 'top'
+            })
         })
     }
 
@@ -37,7 +50,9 @@ export function LoginPage({route, navigation}: any) {
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Username"
+                    maxLength={20}
                     placeholderTextColor="#003f5c"
+                    autoCapitalize="none"
                     onChangeText={(username) => setLoginUser(prev => {return {...prev, 'username': username}})}
                 />
             </View>
@@ -46,6 +61,7 @@ export function LoginPage({route, navigation}: any) {
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Password"
+                    maxLength={16}
                     placeholderTextColor="#003f5c"
                     secureTextEntry={true}
                     onChangeText={(password) => setLoginUser(prev => {return {...prev, 'password': password}})}

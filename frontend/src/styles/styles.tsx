@@ -24,8 +24,9 @@ export const styles = StyleSheet.create({
     TextInput: {
         height: 50,
         flex: 1,
+        width: "100%",
         padding: 10,
-        marginLeft: 20,
+        marginLeft: 20
     },
 
     forgot_button: {
@@ -36,7 +37,7 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     loginBtn: {
-        width: "70%",
+        width: "40%",
         borderRadius: 25,
         height: 50,
         alignItems: "center",

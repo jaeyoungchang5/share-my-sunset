@@ -1,6 +1,7 @@
 // external imports
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, StatusBar, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { useToast } from 'native-base';
 
 // internal imports
 import { signup } from '../../middleware';
@@ -16,8 +17,19 @@ export function SignupPage({navigation}: any) {
         password: ''
     });
 
+    const toast = useToast();
+
     function handleSignupButton(event: any) {
         event.preventDefault();
+
+        if (signupUser.firstName.length == 0 || signupUser.lastName.length == 0 ||
+            signupUser.username.length == 0 || signupUser.password.length == 0) {
+            return toast.show({
+                title: 'Please fill out required fields',
+                placement: 'top'
+            })
+        }
+
         signup(signupUser)
         .then(() => {
             getUser()
@@ -25,7 +37,11 @@ export function SignupPage({navigation}: any) {
                 navigation.navigate('App', {appUserId: res.body.userId});
             })
         }).catch(err => {
-            // notify user that username has already been taken
+            return toast.show({
+                title: 'Signup failed',
+                description: 'Username already taken.',
+                placement: 'top'
+            })
         })
     }
 
@@ -36,7 +52,9 @@ export function SignupPage({navigation}: any) {
                 <TextInput
                     style={styles.TextInput}
                     placeholder="First name"
+                    maxLength={20}
                     placeholderTextColor="#003f5c"
+                    autoCapitalize='words'
                     onChangeText={(firstName) => setSignupUser(prev => {return {...prev, 'firstName': firstName}})}
                 />
             </View>
@@ -44,7 +62,9 @@ export function SignupPage({navigation}: any) {
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Last name"
+                    maxLength={20}
                     placeholderTextColor="#003f5c"
+                    autoCapitalize='words'
                     onChangeText={(lastName) => setSignupUser(prev => {return {...prev, 'lastName': lastName}})}
                 />
             </View>
@@ -52,7 +72,9 @@ export function SignupPage({navigation}: any) {
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Username"
+                    maxLength={20}
                     placeholderTextColor="#003f5c"
+                    autoCapitalize="none"
                     onChangeText={(username) => setSignupUser(prev => {return {...prev, 'username': username}})}
                 />
             </View>
@@ -61,6 +83,7 @@ export function SignupPage({navigation}: any) {
                 <TextInput
                     style={styles.TextInput}
                     placeholder="Password"
+                    maxLength={16}
                     placeholderTextColor="#003f5c"
                     secureTextEntry={true}
                     onChangeText={(password) => setSignupUser(prev => {return {...prev, 'password': password}})}
