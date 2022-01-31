@@ -17,6 +17,11 @@ export interface IUserGeneralInfo {
     bio: string,
 }
 
+export interface IUserPasswordInfo {
+    oldPassword: string,
+    newPassword: string,
+}
+
 export interface IPostIds {
     result: string,
     message: string,

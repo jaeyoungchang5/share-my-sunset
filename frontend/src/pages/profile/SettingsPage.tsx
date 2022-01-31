@@ -9,7 +9,8 @@ import { deleteUser } from '../../middleware';
 
 export function SettingsPage({route, navigation}: any) {
 	const appUserId: string = route.params.appUserId;
-    const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     function handleUpdateProfileButton() {
         navigation.navigate('Update Profile Page', {appUserId: appUserId});
@@ -20,7 +21,7 @@ export function SettingsPage({route, navigation}: any) {
     }
 
     function handleDeleteProfileButton() {
-        setShowModal(false);
+        setShowDeleteModal(false);
         deleteUser(appUserId)
         .then(res => {
             handleLogoutButton();
@@ -42,13 +43,33 @@ export function SettingsPage({route, navigation}: any) {
             <TouchableOpacity style={styles.btn} onPress={handleUpdatePasswordButton}>
                 <Text style={styles.btnText}>Update your password</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btn} onPress={handleLogoutButton}>
-                <Text style={styles.btnText}>Log Out</Text>
+            <TouchableOpacity style={styles.deleteBtn} onPress={() => setShowLogoutModal(true)}>
+                <Text style={styles.deleteBtnText}>Log Out</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteBtn} onPress={() => setShowModal(true)}>
+            <TouchableOpacity style={styles.deleteBtn} onPress={() => setShowDeleteModal(true)}>
                 <Text style={styles.deleteBtnText}>Delete account</Text>
             </TouchableOpacity>
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg">
+
+            <Modal isOpen={showLogoutModal} onClose={() => setShowLogoutModal(false)} size="lg">
+                <Modal.Content maxWidth="350">
+                    <Modal.CloseButton />
+                    <Modal.Header>Log out</Modal.Header>
+                    <Modal.Body>
+                        <VStack space={3}>
+                            <HStack alignItems="center" justifyContent="space-between">
+                                <Text>Are you sure you want to log out?</Text>
+                            </HStack>
+                        </VStack>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button style={{backgroundColor: 'red'}} flex="1" onPress={handleLogoutButton}>
+                            Log out
+                        </Button>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
+
+            <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} size="lg">
                 <Modal.Content maxWidth="350">
                     <Modal.CloseButton />
                     <Modal.Header>Delete Account</Modal.Header>
@@ -95,7 +116,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
+        marginTop: 15,
         backgroundColor: "red"
     },
     deleteBtnText: {

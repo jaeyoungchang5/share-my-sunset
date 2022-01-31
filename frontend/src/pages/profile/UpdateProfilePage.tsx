@@ -64,7 +64,6 @@ export function UpdateProfilePage({route, navigation}: any) {
                     style={styles.TextInput}
                     value={userInfo.firstName}
                     maxLength={20}
-                    placeholderTextColor="#003f5c"
                     autoCapitalize='words'
                     onChangeText={(firstName) => setUserInfo(prev => {return {...prev, 'firstName': firstName}})}
                 />
@@ -75,7 +74,6 @@ export function UpdateProfilePage({route, navigation}: any) {
                     style={styles.TextInput}
                     value={userInfo.lastName}
                     maxLength={20}
-                    placeholderTextColor="#003f5c"
                     autoCapitalize='words'
                     onChangeText={(lastName) => setUserInfo(prev => {return {...prev, 'lastName': lastName}})}
                 />
@@ -86,7 +84,6 @@ export function UpdateProfilePage({route, navigation}: any) {
                     style={styles.TextInput}
                     value={userInfo.username}
                     maxLength={20}
-                    placeholderTextColor="#003f5c"
                     autoCapitalize="none"
                     onChangeText={(username) => setUserInfo(prev => {return {...prev, 'username': username}})}
                 />
@@ -97,7 +94,6 @@ export function UpdateProfilePage({route, navigation}: any) {
                     style={styles.TextInput}
                     value={userInfo.bio}
                     maxLength={40}
-                    placeholderTextColor="#003f5c"
                     onChangeText={(bio) => setUserInfo(prev => {return {...prev, 'bio': bio}})}
                 />
             </View>
