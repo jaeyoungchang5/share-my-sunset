@@ -71,3 +71,15 @@ export function getUserUsername(userId: string) {
         throw new Error('Getting username by id failed');
     })
 }
+
+export function deleteUser(userId: string) {
+    return fetch(CURRENT_SERVER + '/user/deleteUser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({userId: userId})
+    })
+    .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Deleting user failed');
+    })
+}

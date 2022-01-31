@@ -9,7 +9,7 @@ export function UpdatePasswordPage({route, navigation}: any) {
 
     return (
         <View style={styles.container}>
-           <Text>Update password page</Text>
+            <Text>Update password page</Text>
         </View>
     )
 }
