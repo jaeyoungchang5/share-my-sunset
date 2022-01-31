@@ -9,6 +9,7 @@ import { IPostIds } from '../../interfaces';
 
 export function UserPosts({route, navigation}: any) {
     const userId: string = route.params.userId;
+    const appUserId: string = route.params.appUserId;
     const [postIds, setPostIds] = useState<IPostIds>();
 
     useEffect(() => {
@@ -31,7 +32,7 @@ export function UserPosts({route, navigation}: any) {
 
     function renderItem({ item } : any) {
 		return (
-			<Post sunsetId={item._id} userId={userId} navigation={navigation} />
+			<Post appUserId={appUserId} sunsetId={item._id} userId={userId} navigation={navigation} />
 		);
 	}
     return (

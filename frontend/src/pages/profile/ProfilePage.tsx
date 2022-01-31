@@ -13,7 +13,7 @@ export function ProfilePage({route, navigation}: any) {
 	return (
         <Fragment>
             <UserInfo appUserId={appUserId} userId={userId} route={route} navigation={navigation} />
-            <UserNav userId={userId} navigation={navigation} />
+            <UserNav appUserId={appUserId} userId={userId} navigation={navigation} />
         </Fragment>
 	);
 }

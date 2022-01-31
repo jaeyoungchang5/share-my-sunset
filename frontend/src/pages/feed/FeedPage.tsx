@@ -26,7 +26,7 @@ export function FeedPage({route, navigation} : any) {
 
 	function renderItem({ item } : any) {
 		return (
-			<Post sunsetId={item._id} navigation={navigation} />
+			<Post appUserId={appUserId} sunsetId={item._id} userId={appUserId} navigation={navigation} />
 		);
 	}
 

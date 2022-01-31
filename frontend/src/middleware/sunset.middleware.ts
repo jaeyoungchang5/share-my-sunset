@@ -60,3 +60,36 @@ export function shareSunset(sunsetInfo: IShareSunsetInfo) {
         console.log(resData);
     })
 }
+
+export function updateSunsetCaption(sunsetId: string, caption: string) {
+    return fetch(CURRENT_SERVER + '/sunset/updateSunsetCaption', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            sunsetId: sunsetId,
+            description: caption
+        })
+    })
+    .then(res => {
+        if (res.status == 201) {
+            return res.json();
+        }
+        throw new Error('Updating sunset caption failed');
+    })
+}
+
+export function deleteSunset(sunsetId: string) {
+    return fetch(CURRENT_SERVER + '/sunset/deleteSunset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            sunsetId: sunsetId
+        })
+    })
+    .then(res => {
+        if (res.status == 201) {
+            return res.json();
+        }
+        throw new Error('Deleting sunset failed');
+    })
+}
