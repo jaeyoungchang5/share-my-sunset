@@ -1,7 +1,7 @@
 // internal imports
 import { CURRENT_SERVER } from './server.middleware';
 import { createToken } from '../utils';
-import { ISignupCredentials, ILoginCredentials } from '../interfaces';
+import { ISignupCredentials, ILoginCredentials, IUserGeneralInfo } from '../interfaces';
 
 
 export function login(loginCredentials: ILoginCredentials){
@@ -43,6 +43,20 @@ export function getUserInfo(userId: string) {
     .then(res => {
         if (res.ok) return res.json();
         throw new Error('Getting user info by id failed');
+    })
+}
+
+export function updateUserInfo(userId: string, userInfo: IUserGeneralInfo) {
+    return fetch(CURRENT_SERVER + '/user/updateInfo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({userId, ...userInfo})
+    })
+    .then(res => {
+        if (res.status == 201) {
+            return res.json();
+        }
+        throw new Error('Updating user info by id failed');
     })
 }
 

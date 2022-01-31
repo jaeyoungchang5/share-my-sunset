@@ -3,7 +3,7 @@ import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // internal imports
-import { ProfilePage, SettingsPage } from "../pages";
+import { ProfilePage, SettingsPage, UpdateProfilePage, UpdatePasswordPage } from "../pages";
 
 export function ProfileNav({route} : any) {
 	const appUserId: string = route.params.appUserId;
@@ -30,11 +30,31 @@ export function ProfileNav({route} : any) {
                 }} 
             />
             <Stack.Screen 
+                name='Update Profile Page'
+                component={UpdateProfilePage}
+                initialParams={{appUserId: appUserId}}
+                options={{
+                    headerTitle: '', 
+                    headerTransparent: true,
+                    headerBackTitleVisible: false
+                }} 
+            />
+            <Stack.Screen 
+                name='Update Password Page'
+                component={UpdatePasswordPage}
+                initialParams={{appUserId: appUserId}}
+                options={{
+                    headerTitle: '', 
+                    headerTransparent: true,
+                    headerBackTitleVisible: false
+                }} 
+            />
+            <Stack.Screen 
                 name='Settings'
                 component={SettingsPage}
-                initialParams={{userId: appUserId}}
+                initialParams={{appUserId: appUserId}}
                 options={{
-                    headerTitle: 'Settings', 
+                    headerTitle: '', 
                     headerTransparent: true,
                     headerBackTitleVisible: false
                 }} 

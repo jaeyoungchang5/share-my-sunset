@@ -10,6 +10,13 @@ export interface IUser {
     sunsets: string[],
 }
 
+export interface IUserGeneralInfo {
+    firstName: string,
+    lastName: string,
+    username: string,
+    bio: string,
+}
+
 export interface IPostIds {
     result: string,
     message: string,
