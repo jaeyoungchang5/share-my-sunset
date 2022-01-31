@@ -75,8 +75,12 @@ export function getUsersFriends(req: Request, res: Response): void {
     User.findOne({_id: body.userId, isDeleted: false}).select('friends')
     .then(userData => {
         if (userData){
-            debuglog('LOG', 'friend controller - getUsersFriends', 'got user friends');
-            res.status(200).json({result: 'success', data: userData});
+            User.find({'_id': { $in: userData.friends}}).select('firstName lastName username')
+            .then(users => {
+                debuglog('LOG', 'friend controller - getUsersFriends', 'got user friends');
+                res.status(200).json({result: 'success', data: users});
+                return;
+            })
         } else {
             debuglog('ERROR', 'friend controller - getUsersFriends', 'user not found');
             res.status(404).json({result: 'error', message: 'User not found.'});
@@ -110,9 +114,17 @@ export function getUsersFriendRequests(req: Request, res: Response): void {
             return;
         }
         
-        debuglog('LOG', 'friend controller - getUsersFriendRequests', 'got all friend requests');
-        res.status(200).json({result: 'success', message: 'Got all friend requests.', data: existingRequests});
-        return;
+        let friendRequesterIds = [];
+        for (let i=0; i<existingRequests.length; i++) {
+            friendRequesterIds.push(existingRequests[i].requester.toString())
+        }
+
+        User.find({'_id': { $in: friendRequesterIds}}).select('firstName lastName username')
+        .then(users => {
+            debuglog('LOG', 'friend controller - getUsersFriendRequests', 'got all friend requests');
+            res.status(200).json({result: 'success', message: 'Got all friend requests.', data: users});
+            return;
+        })       
 
     }).catch(err => { // catch errors
         debuglog('ERROR', 'friend controller - getUsersFriendRequests', err);
