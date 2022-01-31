@@ -10,20 +10,13 @@ export function NotificationsNav({route} : any) {
     const Stack = createNativeStackNavigator();
     
     return (
-        <Stack.Navigator initialRouteName="Notifications-Home">
-            <Stack.Screen 
-                name='Notifications-Home' 
-                component={NotificationsPage} 
-                initialParams={{appUserId: appUserId}} 
-                options={{
-                    headerShown: false
-                }} 
-            />
+        <Stack.Navigator initialRouteName="Friend Requests">
             <Stack.Screen 
                 name='Friend Requests' 
                 component={NotificationsPage} 
                 initialParams={{appUserId: appUserId}} 
                 options={{
+                    headerShown: false
                 }} 
             />
             <Stack.Screen 

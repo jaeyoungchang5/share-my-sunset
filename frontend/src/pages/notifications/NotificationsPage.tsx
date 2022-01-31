@@ -39,6 +39,8 @@ export function NotificationsPage({route, navigation}: any) {
 		return (
 			<FullUserTag
 				userId={item.requester}
+				firstName={""}
+				lastName={""}
 				username={item.requester}
 				navigation={navigation}
 			/>
@@ -55,9 +57,6 @@ export function NotificationsPage({route, navigation}: any) {
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.title}>
-				<Text style={styles.titleText}>Friend Requests</Text>
-			</View>
 			<FlatList
 				style={styles.friendRequestsList}
 				data={friendRequests?.data}

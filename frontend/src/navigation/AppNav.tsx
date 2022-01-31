@@ -51,6 +51,7 @@ export function AppNav({route}: any) {
                 name='Notifications' 
                 component={NotificationsNav}
                 options={{
+                    headerTitle: 'Friend Requests',
                     tabBarIcon: (({focused, color, size}) => {
                         return <Ionicons name="notifications" size={size} />
                     })
