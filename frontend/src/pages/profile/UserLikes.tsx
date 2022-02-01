@@ -5,9 +5,19 @@ import { Text, View, SafeAreaView, StyleSheet } from 'react-native';
 // internal imports
 
 export function UserLikes() {
+	const [refreshing, setRefreshing] = useState(false);
+
+    function onRefresh() {
+		setRefreshing(true);
+		setTimeout(() => {
+            // load likes
+			setRefreshing(false);
+		}, 700)
+	}
+
     return (
         <View style={styles.container}>
-            <Text style={{ color: "#000" }}>This is user's likes.</Text>
+            <Text style={{ color: "#000" }}>Coming soon . . .</Text>
         </View> 
     );
 }

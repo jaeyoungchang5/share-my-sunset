@@ -11,10 +11,10 @@ export function ProfilePage({route, navigation}: any) {
     const appUserId: string = route.params.appUserId;
     
 	return (
-        <Fragment>
+        <View style={styles.scroll}>
             <UserInfo appUserId={appUserId} userId={userId} route={route} navigation={navigation} />
             <UserNav appUserId={appUserId} userId={userId} navigation={navigation} />
-        </Fragment>
+        </View>
 	);
 }
 

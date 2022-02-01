@@ -1,6 +1,6 @@
 // external imports
 import React, { useState, useEffect, Fragment } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 // internal imports
@@ -67,11 +67,11 @@ export function UserInfo({route, navigation, appUserId, userId}: any) {
 
 const styles = StyleSheet.create({
 	container: {
-        alignItems: 'center',
+        flex: 0.2,
         backgroundColor: '#FFF',
         paddingBottom: 10,
         paddingTop: 10,
-        height: '20%',
+        alignItems: 'center',
     },
     settingsButton: {
         alignSelf: 'flex-end',

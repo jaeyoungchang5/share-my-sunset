@@ -1,6 +1,6 @@
 // external imports
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, FlatList } from 'react-native';
+import { Text, View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 
 // internal imports
 import { FullUserTag } from '../../components';
@@ -10,20 +10,25 @@ import { IFriends } from '../../interfaces';
 export function UserFriends({route, navigation}: any) {
     const userId: string = route.params.userId;
     const [friends, setFriends] = useState<IFriends>();
+	const [refreshing, setRefreshing] = useState(false);
     
     useEffect(() => {
         let mounted = true;
+        loadUsersFriends(mounted);        
+
+        return function cleanup() {
+            mounted = false;
+        }
+    }, [])
+
+    function loadUsersFriends(mounted: boolean) {
         getUsersFriends(userId)
         .then(res => {
             if (mounted) {
                 setFriends(res);
             }
         })
-
-        return function cleanup() {
-            mounted = false;
-        }
-    }, [])
+    }
 
     function renderItem({ item } : any) {
 		return (
@@ -36,11 +41,28 @@ export function UserFriends({route, navigation}: any) {
 			/>
 		);
 	}
+
+     function onRefresh() {
+		setRefreshing(true);
+		setTimeout(() => {
+			loadUsersFriends(true);
+			setRefreshing(false);
+		}, 700)
+	}
+
     return (
-        <FlatList style={styles.scroll}
+        <FlatList 
+            style={styles.scroll}
             data={friends?.data}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
+            refreshing={refreshing}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
+            }
         />
     );
 }
