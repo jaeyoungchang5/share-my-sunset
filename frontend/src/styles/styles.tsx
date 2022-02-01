@@ -8,6 +8,13 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
     },
 
+    keyboardAvoid: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: 'red'
+    },
+
     image: {
         marginBottom: 40,
     },
@@ -15,10 +22,11 @@ export const styles = StyleSheet.create({
     inputView: {
         backgroundColor: "#FFC0CB",
         borderRadius: 30,
-        width: "70%",
+        width: "100%",
         height: 45,
         marginBottom: 20,
         alignItems: "center",
+        justifyContent: 'center'
     },
 
     TextInput: {

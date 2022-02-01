@@ -1,6 +1,6 @@
 // external imports
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { useToast } from 'native-base';
 
 // internal imports
@@ -57,55 +57,70 @@ export function UpdateProfilePage({route, navigation}: any) {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>First name</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    value={userInfo.firstName}
-                    maxLength={20}
-                    autoCapitalize='words'
-                    onChangeText={(firstName) => setUserInfo(prev => {return {...prev, 'firstName': firstName}})}
-                />
-            </View>
-            <Text style={styles.text}>Last name</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    value={userInfo.lastName}
-                    maxLength={20}
-                    autoCapitalize='words'
-                    onChangeText={(lastName) => setUserInfo(prev => {return {...prev, 'lastName': lastName}})}
-                />
-            </View>
-            <Text style={styles.text}>Username</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    value={userInfo.username}
-                    maxLength={20}
-                    autoCapitalize="none"
-                    onChangeText={(username) => setUserInfo(prev => {return {...prev, 'username': username}})}
-                />
-            </View>
-            <Text style={styles.text}>Bio</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    value={userInfo.bio}
-                    maxLength={40}
-                    onChangeText={(bio) => setUserInfo(prev => {return {...prev, 'bio': bio}})}
-                />
-            </View>
+        <KeyboardAvoidingView 
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.keyboardAvoid}
+            keyboardVerticalOffset={0}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            value={userInfo.firstName}
+                            placeholder="First name"
+                            placeholderTextColor="#003f5c"
+                            maxLength={20}
+                            autoCapitalize='words'
+                            onChangeText={(firstName) => setUserInfo(prev => {return {...prev, 'firstName': firstName}})}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            value={userInfo.lastName}
+                            placeholder="Last name"
+                            placeholderTextColor="#003f5c"
+                            maxLength={20}
+                            autoCapitalize='words'
+                            onChangeText={(lastName) => setUserInfo(prev => {return {...prev, 'lastName': lastName}})}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            value={userInfo.username}
+                            placeholder="Username"
+                            placeholderTextColor="#003f5c"
+                            maxLength={20}
+                            autoCapitalize="none"
+                            onChangeText={(username) => setUserInfo(prev => {return {...prev, 'username': username}})}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            value={userInfo.bio}
+                            placeholder="Bio"
+                            placeholderTextColor="#003f5c"
+                            maxLength={40}
+                            onChangeText={(bio) => setUserInfo(prev => {return {...prev, 'bio': bio}})}
+                        />
+                    </View>
 
-            <TouchableOpacity style={styles.loginBtn} onPress={handleUpdateButton}>
-                <Text style={styles.loginText}>Update info</Text>
-            </TouchableOpacity>
-        </View>
+                    <TouchableOpacity style={styles.loginBtn} onPress={handleUpdateButton}>
+                        <Text style={styles.loginText}>Update info</Text>
+                    </TouchableOpacity>
+                </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 
 const styles = StyleSheet.create({
+    keyboardAvoid: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         backgroundColor: "#fff",
@@ -156,6 +171,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFC0CB",
     },
     text: {
-        alignItems: 'flex-start'
+        // alignItems: 'flex-start'
     }
 });

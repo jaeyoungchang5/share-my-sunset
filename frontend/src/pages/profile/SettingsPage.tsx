@@ -31,6 +31,7 @@ export function SettingsPage({route, navigation}: any) {
     }
 
     function handleLogoutButton() {
+        setShowLogoutModal(false);
         removeToken();
         navigation.navigate('Auth');
     }

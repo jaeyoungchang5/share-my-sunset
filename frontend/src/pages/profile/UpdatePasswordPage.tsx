@@ -1,6 +1,6 @@
 // external imports
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { useToast } from 'native-base';
 
 // internal imports
@@ -36,39 +36,48 @@ export function UpdatePasswordPage({route, navigation}: any) {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Old password</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    placeholder='Old password'
-                    maxLength={16}
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(oldPassword) => setUserInfo(prev => {return {...prev, 'oldPassword': oldPassword}})}
-                />
-            </View>
-            <Text style={styles.text}>New password</Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    placeholder='New password'
-                    maxLength={16}
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(newPassword) => setUserInfo(prev => {return {...prev, 'newPassword': newPassword}})}
-                />
-            </View>
+        <KeyboardAvoidingView 
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.keyboardAvoid}
+            keyboardVerticalOffset={0}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholder='Old password'
+                            maxLength={16}
+                            placeholderTextColor="#003f5c"
+                            secureTextEntry={true}
+                            onChangeText={(oldPassword) => setUserInfo(prev => {return {...prev, 'oldPassword': oldPassword}})}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            placeholder='New password'
+                            maxLength={16}
+                            placeholderTextColor="#003f5c"
+                            secureTextEntry={true}
+                            onChangeText={(newPassword) => setUserInfo(prev => {return {...prev, 'newPassword': newPassword}})}
+                        />
+                    </View>
 
-            <TouchableOpacity style={styles.loginBtn} onPress={handleUpdateButton}>
-                <Text style={styles.loginText}>Update password</Text>
-            </TouchableOpacity>
-        </View>
+                    <TouchableOpacity style={styles.loginBtn} onPress={handleUpdateButton}>
+                        <Text style={styles.loginText}>Update password</Text>
+                    </TouchableOpacity>
+                </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 
 
 const styles = StyleSheet.create({
+    keyboardAvoid: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         backgroundColor: "#fff",

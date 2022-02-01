@@ -12,6 +12,7 @@ export function UploadPage({route}: any) {
 		<KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
 			style={styles.container}
+			keyboardVerticalOffset={0}
 		>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<View>
