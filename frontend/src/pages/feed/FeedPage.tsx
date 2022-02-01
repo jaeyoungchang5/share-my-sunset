@@ -1,6 +1,7 @@
 // external imports
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { useScrollToTop } from '@react-navigation/native';
 
 // internal imports
 import { IFeed } from '../../interfaces';
@@ -13,6 +14,9 @@ export function FeedPage({route, navigation} : any) {
 	const [feed, setFeed] = useState<IFeed>();
 	const [refreshing, setRefreshing] = useState(false);
 	
+	const ref = React.useRef(null);
+	useScrollToTop(ref);
+
 	useEffect(() => {
 		loadFeed();
 	}, []);
@@ -39,7 +43,9 @@ export function FeedPage({route, navigation} : any) {
 	}
 
 	return (
-		<FlatList style={styles.scroll}
+		<FlatList 
+			style={styles.scroll}
+			ref={ref}
 			data={feed?.data}
 			renderItem={renderItem}
 			keyExtractor={(item) => item._id}
