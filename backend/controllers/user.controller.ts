@@ -5,6 +5,7 @@
     ** signup 
     ** login 
     ** getUserInfo 
+    ** getUserUsername
     ** updateUserInfo 
     ** updateUserPassword 
     ** deleteUser
@@ -120,6 +121,36 @@ export function getUserInfo(req: Request, res: Response){
         }
     }).catch(err => { // catch errors
         debuglog('ERROR', 'user controller - getUserInfo', err);
+        res.status(400).json(err);
+        return;
+    })
+}
+
+/**
+ * @description Get username for a user, given user's id
+ * @param {ObjectId} req.body.userId User's id
+ */
+export function getUserUsername(req: Request, res: Response){
+    if (!req.body.userId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        userId: new mongoose.Types.ObjectId(req.body.userId)
+    }
+
+    User.findOne({_id: body.userId, isDeleted: false}).select('username')
+    .then(userData => {
+        if (userData){
+            debuglog('LOG', 'user controller - getUserUsername', 'got user info');
+            res.status(200).json({result: 'success', data: userData});
+        } else {
+            debuglog('ERROR', 'user controller - getUserUsername', 'user not found');
+            res.status(404).json({result: 'error', message: 'User not found.'});
+        }
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'user controller - getUserUsername', err);
         res.status(400).json(err);
         return;
     })

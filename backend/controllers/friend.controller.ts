@@ -2,6 +2,9 @@
  * @fileoverview friend.controller.ts
  * This file contains all the controller functions for the friend collection.
  * Functions: 
+    ** checkFriendStatus
+    ** getUsersFriends
+    ** getUsersFriendRequests
     ** sendFriendRequest
     ** acceptFriendRequest
     ** rejectFriendRequest
@@ -13,6 +16,122 @@ import { debuglog } from '../helpers';
 import { User, IUserModel, FriendRequest } from '../models';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+
+/**
+ * @description Check status of 2 users
+ * @param {ObjectId} req.body.userIdA User A Id
+ * @param {ObjectId} req.body.userIdB User B Id
+ */
+export function checkFriendStatus(req: Request, res: Response): void {
+    if (!req.body.userIdA || !req.body.userIdB) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        userIdA: new mongoose.Types.ObjectId(req.body.userIdA),
+        userIdB: new mongoose.Types.ObjectId(req.body.userIdB)
+    }
+
+    User.findOne({
+        $or: [
+            { _id: body.userIdA, friends: body.userIdB },
+            { _id: body.userIdB, friends: body.userIdA }
+        ]
+    }).then(response => {
+        if (response != null) {
+            res.status(200).json({result: 'success', status: 'Friends', message: 'Users are friends.'});
+            return;
+        }
+        FriendRequest.find({$or: [
+            { requester: body.userIdA, recipient: body.userIdB },
+            { recipient: body.userIdA, requester: body.userIdB }
+        ]}).then(response => {
+            if (response.length != 0) {
+                res.status(200).json({result: 'success', status: 'Pending', message: 'Users are pending friends.', data: response});
+                return;
+            } 
+
+            res.status(200).json({result: 'success', status: 'None', message: 'Users have no relationship.'});
+        })
+    })
+
+}
+
+/**
+ * @description Gets user's friends by userId
+ * @param {ObjectId} req.body.userId Requester
+ */
+export function getUsersFriends(req: Request, res: Response): void {
+    if (!req.body.userId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        userId: new mongoose.Types.ObjectId(req.body.userId)
+    }
+
+    User.findOne({_id: body.userId, isDeleted: false}).select('friends')
+    .then(userData => {
+        if (userData){
+            User.find({'_id': { $in: userData.friends}}).select('firstName lastName username')
+            .then(users => {
+                debuglog('LOG', 'friend controller - getUsersFriends', 'got user friends');
+                res.status(200).json({result: 'success', data: users});
+                return;
+            })
+        } else {
+            debuglog('ERROR', 'friend controller - getUsersFriends', 'user not found');
+            res.status(404).json({result: 'error', message: 'User not found.'});
+        }
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'friend controller - getUsersFriends', err);
+        res.status(400).json(err);
+        return;
+    })
+}
+
+/**
+ * @description Gets user's friends by userId
+ * @param {ObjectId} req.body.userId Requester
+ */
+export function getUsersFriendRequests(req: Request, res: Response): void {
+    if (!req.body.userId) {
+        res.status(400).json({result: 'error', message: 'Unsatisfied requirements.'});
+        return;
+    }
+
+    const body = {
+        userId: new mongoose.Types.ObjectId(req.body.userId)
+    }
+
+    FriendRequest.find({recipient: body.userId}).sort({createdAt: 'descending'}).select('requester')
+    .then(existingRequests => {
+        if (existingRequests.length == 0) {
+            debuglog('LOG', 'friend controller - getUsersFriendRequests', 'no friend requests');
+            res.status(200).json({result: 'success', message: 'No friend requests.'});
+            return;
+        }
+        
+        let friendRequesterIds = [];
+        for (let i=0; i<existingRequests.length; i++) {
+            friendRequesterIds.push(existingRequests[i].requester.toString())
+        }
+
+        User.find({'_id': { $in: friendRequesterIds}}).select('firstName lastName username')
+        .then(users => {
+            debuglog('LOG', 'friend controller - getUsersFriendRequests', 'got all friend requests');
+            res.status(200).json({result: 'success', message: 'Got all friend requests.', data: users});
+            return;
+        })       
+
+    }).catch(err => { // catch errors
+        debuglog('ERROR', 'friend controller - getUsersFriendRequests', err);
+        res.status(400).json(err);
+        return;
+    })
+}
 
 /**
  * @description Requester sends friend request to Recipient

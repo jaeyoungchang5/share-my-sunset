@@ -73,6 +73,12 @@ const UserSchema: Schema = new Schema({
     }
 });
 
+UserSchema.index({
+    username: 'text',
+    firstName: 'text',
+    lastName: 'text'
+});
+
 /**
  * @method pre('save') : user method for encrypting password before saving the user
  */
