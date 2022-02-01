@@ -1,7 +1,6 @@
 // external imports
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider as PaperProvider } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeBaseProvider } from 'native-base';
@@ -22,7 +21,6 @@ export default function App() {
 
 	return (
 		<NativeBaseProvider>
-		<PaperProvider>
 		<SafeAreaProvider>
 			<NavigationContainer>
 				<Stack.Navigator initialRouteName='AppLoading'>
@@ -51,7 +49,6 @@ export default function App() {
 				</Stack.Navigator>
 			</NavigationContainer>
 		</SafeAreaProvider>
-		</PaperProvider>
 		</NativeBaseProvider>
 	);
 }

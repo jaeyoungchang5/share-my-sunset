@@ -1,6 +1,7 @@
 // external imports
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import { useScrollToTop } from '@react-navigation/native';
 
 // internal imports
 import { FullUserTag } from '../../components';
@@ -11,6 +12,9 @@ export function UserFriends({route, navigation}: any) {
     const userId: string = route.params.userId;
     const [friends, setFriends] = useState<IFriends>();
 	const [refreshing, setRefreshing] = useState(false);
+
+	const ref = React.useRef(null);
+	useScrollToTop(ref);
     
     useEffect(() => {
         let mounted = true;
@@ -53,6 +57,7 @@ export function UserFriends({route, navigation}: any) {
     return (
         <FlatList 
             style={styles.scroll}
+            ref={ref}
             data={friends?.data}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}

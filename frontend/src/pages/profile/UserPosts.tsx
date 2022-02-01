@@ -1,6 +1,7 @@
 // external imports
 import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import { useScrollToTop } from '@react-navigation/native';
 
 // internal imports
 import { Post } from '../../components/Post';
@@ -13,6 +14,9 @@ export function UserPosts({route, navigation}: any) {
     const [postIds, setPostIds] = useState<IPostIds>();
 	const [refreshing, setRefreshing] = useState(false);
 
+	const ref = React.useRef(null);
+	useScrollToTop(ref);
+    
     useEffect(() => {
         let mounted = true;
 		loadPostIds(mounted);
@@ -48,6 +52,7 @@ export function UserPosts({route, navigation}: any) {
     return (
         <FlatList 
             style={styles.scroll}
+            ref={ref}
 			data={postIds?.data}
 			renderItem={renderItem}
 			keyExtractor={(item) => item._id}
